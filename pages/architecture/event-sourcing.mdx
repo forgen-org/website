@@ -89,13 +89,13 @@ type Account = {
 };
 
 // Decision Function: Determines the appropriate event for an action
-const withdraw = (account: Account, amount: number): AccountEvent[] | string => {
-  if (action === 'withdraw' && account.balance < amount) return 'Insufficient funds';
-  return [{ type: 'Withdrawn', amount }];
+const withdraw = (account: Account, amount: number): Result<AccountEvent[], string> => {
+  if (action === 'withdraw' && account.balance < amount) return Result.err('Insufficient funds');
+  return Result.ok([{ type: 'Withdrawn', amount }]);
 };
 
-const deposit = (account: Account, action: amount: number): AccountEvent[] | string => {
-  return [{ type: 'Deposited', amount }];
+const deposit = (account: Account, action: amount: number): Result<AccountEvent[], string> => {
+  return Result.ok([{ type: 'Deposited', amount }]);
 };
 
 // Evolution Function: Evolves the state of the account based on an event
