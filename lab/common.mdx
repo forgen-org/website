@@ -1,0 +1,65 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Common
+
+## Scalars
+- Primitive types such as string, boolean, number, etc.
+- Can be used to describe a specific type of data and assert type-safety.
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type UserId = string & { __tag: "UserId" };
+```
+</Tab>
+<Tab>
+```rust
+struct UserId(String);
+```
+</Tab>
+</Tabs>
+
+## Values
+- Similar to DDD's entities and value-objects but because we are immutable, it doesn't make sense to have both.
+- Values are made of scalars exclusively.
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type UserValue = {
+    name: string;
+};
+```
+</Tab>
+<Tab>
+```rust
+struct UserValue {
+    name: String;
+}
+```
+</Tab>
+</Tabs>
+
+
+## InOut (aka DTO or Ports)
+- Everything that goes in and out of a module.
+- In should be deserializeable from a data transfer standard (e.g. JSON)
+- Out should be serializeable
+- InOut should be both
+
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+// Using Zod
+const DataIn = zod.object({
+    name: zod.string(),
+});
+```
+</Tab>
+<Tab>
+```rust
+#[derive(Deserialize)]
+struct DataIn {
+    name: String;
+}
+```
+</Tab>
+</Tabs>

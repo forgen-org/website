@@ -1,0 +1,236 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Modules Layer
+Modules are the building blocks of everything. They encapsulate all the domain specific logic. A module is responsible for handling commands and producing events. That's it. It exposes a `handle: (command) -> Future<Result<Event[], Error>>`.
+
+## Rules
+- No direct dependency (except tiny system libraries such as Temporal, Result, UUID, etc.)
+- Injected dependencies
+- Everything that comes in must be parsed.
+
+## Scalars
+- Primitive types such as string, boolean, number, etc.
+- Can be used to describe a specific type of data and assert type-safety.
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type UserId = string & { __tag: "UserId" };
+```
+</Tab>
+<Tab>
+```rust
+struct UserId(String);
+```
+</Tab>
+</Tabs>
+
+## Values
+- Similar to DDD's entities and value-objects but because we are immutable, it doesn't make sense to have both.
+- Values are made of scalars exclusively.
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type UserValue = {
+    name: string;
+};
+```
+</Tab>
+<Tab>
+```rust
+struct UserValue {
+    name: String;
+}
+```
+</Tab>
+</Tabs>
+
+## Events
+- Similar to DDD's domain events.
+- Usually `InOut` because they need to be serialized and deserialized.
+- Have a timestamp
+- Past tense
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type UserCreated = {
+    name: string;
+    occuredAt: Date;
+};
+```
+</Tab>
+<Tab>
+```rust
+#[derive(Serialize, Deserialize)]
+struct UserCreated {
+    name: String;
+    occured_at: Instant;
+}
+```
+</Tab>
+</Tabs>
+
+## Errors
+- Similar to DDD's domain errors.
+- Usually `Out` because they need to be serialized.
+- Have a name
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type CreateUserError = {
+    name: "ForbiddenName";
+    value: string;
+} | {
+    name: "NameTooLong";
+    value: string;
+};
+```
+</Tab>
+<Tab>
+```rust
+#[derive(Serialize)]
+enum CreateUserError {
+    ForbiddenName { value: String },
+    NameTooLong { value: String },
+}
+```
+</Tab>
+</Tabs>
+
+## Command
+- Describe an action that can be performed.
+- Imperative form
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type CreateUser = {
+    name: string;
+};
+```
+</Tab>
+<Tab>
+```rust
+struct CreateUser {
+    name: String;
+}
+```
+</Tab>
+</Tabs>
+
+## Handler
+- Transform a command into events or errors.
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+interface UserHandler extends Array<UserEvent> {
+    handle: (command: CreateUser) => () => Promise<Result<UserEvent[], UserError>>; // Lazy evaluation
+}
+```
+</Tab>
+<Tab>
+```rust
+impl Handler for Vec<UserEvent> {
+    fn handle(&self, command: CreateUser) -> Future<Result<UserEvent[], UserError>> {
+        // ...
+    }
+}
+```
+</Tab>
+</Tabs>
+
+## Projection
+- Similar to DDD's aggregates.
+- Made of `Values`.
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type FriendsProjection = {
+    me: UserValue;
+    friends: UserValue[];
+};
+```
+</Tab>
+<Tab>
+```rust
+struct FriendsProjection {
+    me: UserValue;
+    friends: Vec<UserValue>;
+}
+```
+</Tab>
+</Tabs>
+
+## Projector
+- Transform events into a projection
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+const FriendsProjection = {
+    project: (events: UserEvent[]): FriendsProjection  => {
+        // ...
+    }
+}
+```
+</Tab>
+<Tab>
+```rust
+impl Projector for FriendsProjection {
+    fn project(events: Vec<UserEvent>) -> Self {
+        // ...
+    }
+}
+```
+</Tab>
+</Tabs>
+
+
+## InOut (aka DTO or Ports)
+- Everything that goes in and out of a module.
+- In should be deserializeable from a data transfer standard (e.g. JSON)
+- Out should be serializeable
+- InOut should be both
+
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type DataIn = {
+    name: string;
+};
+
+// Using Zod
+const DataIn: z.ZodSchema<DataIn> = zod.object({
+    name: zod.string(),
+});
+```
+</Tab>
+<Tab>
+```rust
+#[derive(Deserialize)]
+struct DataIn {
+    name: String;
+}
+```
+</Tab>
+</Tabs>
+
+## API 
+- The API is the public interface of a module.
+
+<Tabs items={['ts', 'rust']}>
+<Tab>
+```ts
+type API = {
+    create: (data: DataIn) => Promise<void>;
+    on: (event: UserEvent) => Promise<void>;
+};
+```
+</Tab>
+<Tab>
+```rust
+struct API {
+    fn create(&self, data: DataIn) -> Result<(), Error>;
+    fn on(&self, event: UserEvent) -> Result<(), Error>;
+}
+```
+</Tab>
+</Tabs>
+
