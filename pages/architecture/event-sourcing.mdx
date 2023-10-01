@@ -4,34 +4,30 @@ import { Tabs, Tab } from 'nextra/components'
 
 ```mermaid
 flowchart LR
-subgraph Decide
   State
   Command
   Error
   Events[[Events]]
   Handle{handle}
+  NewState(State)
+  Event
+  Apply{apply}
 
   Command --> Handle
   State --> Handle
   Handle --> |Success| Events
   Handle --> |Failure| Error
-end
-subgraph Evolve
-  State
-  NewState(State)
-  Event
-  Apply{apply}
 
   State --> Apply
   Event --> Apply
   Apply --> NewState
-end
+  
 Events -- Pop --> Event
 ```
 
 ## Context
 
-In traditional state mutation for persistence, the system’s state is directly updated and overwritten in the data store. This makes it challenging to reconstruct past states or understand the history and reasons behind state changes. In contrast, event sourcing persists the state of a business entity as a sequence of state-changing events.
+In traditional state mutation for persistence, the system's state is directly updated and overwritten in the data store. This makes it challenging to reconstruct past states or understand the history and reasons behind state changes. In contrast, event sourcing persists the state of a business entity as a sequence of state-changing events.
 
 ## Opinion
 
@@ -42,41 +38,36 @@ We advocate for using event sourcing as a persistence method over state mutation
 <Tabs items={['Rust', 'Typescript']}>
 <Tab>
 ```rust
-#[derive(Debug, Clone)]
 enum AccountEvent {
   Deposited(u64),
   Withdrawn(u64),
 }
 
-#[derive(Debug, Clone)]
 struct Account {
   balance: u64,
-  changes: Vec<AccountEvent>,
 }
 
 impl Account {
   fn new() -> Self {
     Account {
       balance: 0,
-      changes: Vec::new(),
     }
   }
 
   // Decision function: Decides what event should occur based on the action
-  fn decide(&self, action: &str, amount: u64) -> Result<AccountEvent, &'static str> {
-    match action {
-      "withdraw" if self.balance < amount => Err("Insufficient funds"),
-      "withdraw" => Ok(AccountEvent::Withdrawn(amount)),
-      "deposit" => Ok(AccountEvent::Deposited(amount)),
-      _ => Err("Invalid action"),
-    }
+  fn withdraw(&self, amount: u64) -> Result<Vec<AccountEvent>, String> {
+    if self.balance < amount 
+        Err("Insufficient funds".to_string())
+    else
+        Ok(vec![AccountEvent::Withdrawn(amount)])
+  }
+
+  fn deposit(&self, amount: u64) -> Result<Vec<AccountEvent>, String> {
+    Ok(vec![AccountEvent::Deposited(amount)])
   }
 
   // Evolution function: Evolves the state based on the event
-  fn evolve(self, event: AccountEvent) -> Self {
-    let mut new_changes = self.changes.clone();
-    new_changes.push(event.clone());
-
+  fn apply(self, event: AccountEvent) -> Self {
     let new_balance = match event {
       AccountEvent::Deposited(amount) => self.balance + amount,
       AccountEvent::Withdrawn(amount) => self.balance - amount,
@@ -84,22 +75,8 @@ impl Account {
 
     Account {
       balance: new_balance,
-      changes: new_changes,
     }
   }
-
-  fn handle_action(self, action: &str, amount: u64) -> Result<Self, &'static str> {
-    let event = self.decide(action, amount)?;
-    Ok(self.evolve(event))
-  }
-}
-
-fn main() {
-  let account = Account::new();
-  let account = account.handle_action("deposit", 100).unwrap();
-  let account = account.handle_action("withdraw", 50).unwrap();
-
-  println!("{:?}", account.changes);
 }
 ```
 </Tab>
@@ -109,43 +86,25 @@ type AccountEvent = { type: 'Deposited', amount: number } | { type: 'Withdrawn',
 
 type Account = {
   balance: number;
-  changes: AccountEvent[];
 };
 
-// Function to create a new account
-const createAccount = (): Account => ({
-  balance: 0,
-  changes: [],
-});
-
 // Decision Function: Determines the appropriate event for an action
-const decide = (account: Account, action: 'deposit' | 'withdraw', amount: number): AccountEvent | string => {
+const withdraw = (account: Account, amount: number): AccountEvent[] | string => {
   if (action === 'withdraw' && account.balance < amount) return 'Insufficient funds';
-  return { type: action.charAt(0).toUpperCase() + action.slice(1) as 'Deposited' | 'Withdrawn', amount };
+  return [{ type: 'Withdrawn', amount }];
+};
+
+const deposit = (account: Account, action: amount: number): AccountEvent[] | string => {
+  return [{ type: 'Deposited', amount }];
 };
 
 // Evolution Function: Evolves the state of the account based on an event
-const evolve = (account: Account, event: AccountEvent): Account => {
+const apply = (account: Account, event: AccountEvent): Account => {
   const newBalance = event.type === 'Deposited' ? account.balance + event.amount : account.balance - event.amount;
   return {
     balance: newBalance,
-    changes: [...account.changes, event],
   };
 };
-
-// Handle Action: Handles an action and evolves the state of the account
-const handleAction = (account: Account, action: 'deposit' | 'withdraw', amount: number): Account | string => {
-  const eventOrError = decide(account, action, amount);
-  if (typeof eventOrError === 'string') return eventOrError;
-  return evolve(account, eventOrError);
-};
-
-// Example usage:
-let account = createAccount();
-account = handleAction(account, 'deposit', 100) as Account;
-account = handleAction(account, 'withdraw', 50) as Account;
-
-console.log(account.changes);
 ```
 </Tab>
 </Tabs>
