@@ -1,7 +1,34 @@
 import { Cards, Card } from 'nextra/components'
 
-# Welcome to Forgen Documentation
- 
-<Cards>
-  <Card title="Architecture" href="/architecture" />
-</Cards>
+<style jsx>{`
+  body {
+    overflow: hidden;
+  }
+`}</style>
+
+<video autoPlay loop muted style={{
+  bottom: 0,
+  height: '100vh',
+  left: 0,
+  objectFit: 'cover',
+  opacity: 0.1,
+  position: 'fixed',
+  right: 0,
+  top: 0,
+  width: '100vw',
+  zIndex: -1,
+}}>
+  <source src="/tech.mp4" />
+</video>
+
+<h1 style={{
+  left: '50%',
+  position: 'fixed',
+  top: '50%',
+  transform: 'translate(-50%, 50%)',
+
+  fontSize: '3rem',
+  fontWeight: 700,
+}}>
+  Forgen
+</h1>

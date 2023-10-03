@@ -1,7 +1,15 @@
 {
   "index": {
     "title": "Home",
-    "type": "page"
+    "type": "page",
+    "theme": {
+      "breadcrumb": false,
+      "footer": false,
+      "pagination": false,
+      "sidebar": false,
+      "timestamp": false,
+      "toc": false
+    }
   },
   "architecture": {
     "title": "Architecture",
