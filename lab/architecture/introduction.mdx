@@ -34,6 +34,7 @@ graph TB
 - **Bounded Contexts** do not depend on anything else in the system.
 - If a **Bounded Context** needs to use something from another **Bounded Context**, it must be done through the **Application** layer.
 - When a customer explains how he does something, he is explaining the **Business Rules**.
+- There is no need to prefix anything in the **BoundedContext** because it is strongly independent from the rest. No need to have `UserCreate` and `OrganizationCreate`, just `Create` in their respective **Bounded Contexts**.
 
 ## Application Layer
 

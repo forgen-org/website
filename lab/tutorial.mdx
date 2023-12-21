@@ -1,0 +1,44 @@
+# A simple todolist app
+
+## Bounded Context: Todolist
+```rust
+// src/domain/todolist.rs
+use std::io::{self, Write};
+
+struct Task {
+    name: String,
+    done: bool,
+}
+
+impl Task {
+    fn new(name: String) -> Task {
+        Task {
+            name,
+            done: false,
+        }
+    }
+}
+
+struct TodoList {
+    tasks: Vec<Task>,
+}
+
+impl TodoList {
+    fn new() -> TodoList {
+        TodoList {
+            tasks: Vec::new(),
+        }
+    }
+
+    fn add_task(&mut self, name: String) {
+        let task = Task::new(name);
+        self.tasks.push(task);
+    }
+
+    fn complete_task(&mut self, index: usize) {
+        if let Some(task) = self.tasks.get_mut(index) {
+            task.done = true;
+        }
+    }
+}
+```

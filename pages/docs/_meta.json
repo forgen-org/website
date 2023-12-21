@@ -1,0 +1,14 @@
+{
+  "introduction": "Introduction",
+  "supported_languages": "Supported Languages",
+  "-Architecture": {
+    "title": "Architecture",
+    "type": "separator"
+  },
+  "key_concepts": "Key Concepts",
+  "domain": "Domain",
+  "application": "Application",
+  "services": "Services",
+  "clients": "Clients",
+  "framework": "Framework"
+}

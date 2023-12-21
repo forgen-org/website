@@ -1,0 +1,121 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Messages
+
+```mermaid
+flowchart LR
+  Message
+  State
+  Error
+  Event[[Event]]
+  Send{send}
+
+  Message --> Send
+  State --> Send
+  Send --Ok--> Event
+  Send --Err--> Error
+```
+
+In event-sourced systems, messages play a pivotal role in driving application behavior. They act as the catalyst for state changes, adhering strictly to business rules. Messages are essentially actions or commands sent to the system's state. Their primary function is to validate and process these actions according to the defined business logic.
+
+- **Actions to State**: Messages represent actions directed at the system's state.
+- **Business Rule Enforcement**: They are responsible for ensuring that all interactions adhere to the established business rules.
+- **Event Generation or Error Handling**: Upon processing, a message will either result in the generation of events or an error, contingent on the business rule validation.
+
+The message-handling mechanism is integral to maintaining the integrity and consistency of the system. By encapsulating business logic, messages ensure that the state transitions are valid, logical, and traceable. This approach not only enhances the system's reliability but also provides a clear audit trail for every state change.
+
+
+## Creating Messages
+
+The message is the input to the system, and the event is the output. Messages are often mirrors of events. For example, if we have an event called `AmountWithdrawn` we might have a message called `WithdrawAmount`. This might not always be the case, for example we might have a message `UpdateBankAccount` that can produce multiple events, such as `CountryChanged` and `DescriptionUpdated`. Unlike events, it is totally okay to change messages as the system evolves as they are not used to reconstruct the state nor stored.
+
+<Tabs items={['Rust', 'Typescript']}>
+<Tab>
+```rust filename="domain/bankaccount_message.rs"
+pub enum BankAccountMessage {
+  Deposit(f64),
+  Withdraw(f64),
+}
+```
+</Tab>
+<Tab>
+```typescript filename="domain/BankAccountMessage.ts"
+export type BankAccountMessage = 
+  | { _tag: 'Deposit', amount: number }
+  | { _tag: 'Withdraw', amount: number };
+```
+</Tab>
+</Tabs>
+
+## Creating Errors
+
+Errors are used to communicate to the user that a business rule or state invariant has been violated. They should be self-explanatory and provide enough information to the user to understand what went wrong.
+
+<Tabs items={['Rust', 'Typescript']}>
+<Tab>
+```rust filename="domain/bankaccount_error.rs"
+use framework::*;
+
+#[derive(Debug, Error)]
+pub enum BankAccountError {
+  #[error("Not enough fund")]
+  NotEnoughFund
+}
+```
+</Tab>
+<Tab>
+```typescript filename="domain/BankAccountError.ts"
+export type BankAccountError = { _tag: 'NotEnoughFund' };
+```
+</Tab>
+</Tabs>
+
+## Producing Events
+
+Messages are processed with the state, which will either produce events or an error.
+
+<Tabs items={['Rust', 'Typescript']}>
+<Tab>
+```rust filename="domain/bankaccount_message.rs"
+use framework::*;
+
+impl Message<BankAccount> for BankAccountMessage {
+  type Error = BankAccountError;
+  type Events = BankAccountEvent;
+
+  fn send(&self, state: &BankAccount) -> Result<Self::Events, Self::Error> {
+    match self {
+      BankAccountMessage::Deposit(amount) => {
+        Ok(BankAccountEvent::AmountDeposited(*amount))
+      }
+      BankAccountMessage::Withdraw(amount) => {
+        if *amount > state.balance {
+          return Err(BankAccountError::NotEnoughFund);
+        }
+        Ok(BankAccountEvent::AmountWithdrawn(*amount))
+      }
+    }
+  }
+}
+```
+</Tab>
+<Tab>
+```typescript filename="domain/BankAccountMessage.ts"
+import { Either } from 'effect';
+
+export const BankAccountMessage =  {
+  send: (message: BankAccountMessage) => (state: BankAccount): Either<BankAccountError, readonly BankAccountEvent[]> => {
+    switch (message._tag) {
+      case 'Deposit':
+       return Either.right([{ _tag: 'AmountDeposited', amount: message.amount }]);
+      case 'Withdraw':
+        if (message.amount > state.balance) {
+          return Either.left({ _tag: 'NotEnoughFund' });
+        }
+        return Either.right([{ _tag: 'AmountWithdrawn', amount: message.amount }]);
+    }
+  }
+}
+```
+</Tab>
+</Tabs>
