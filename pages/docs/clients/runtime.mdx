@@ -1,0 +1,91 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Runtime
+
+A runtime is an essential concept in clean/hexagonal architecture, especially within the context of command and query execution in the client layer. It is essentially a composite of all necessary traits to execute the commands and queries in your application.
+
+## Understanding Runtime
+
+The runtime serves as the execution context for your application's operations. It's where your application's logic comes to life, interacting with various services, repositories, and stores.
+
+### Core Characteristics:
+
+- **Combination of Traits**: It aggregates all the necessary traits to execute commands and queries.
+- **Execution Context**: Provides the necessary context and dependencies for executing operations.
+- **Delegate Pattern**: To enhance the development experience, runtimes utilize the delegate pattern, which the framework crate directly exposes.
+
+## Creating a Runtime
+
+Creating a runtime involves defining a struct that includes all the necessary traits and services your application requires. Here's an example of how you might define a runtime in Rust using the delegate pattern:
+
+<Tabs items={['Rust']}>
+<Tab>
+```rust filename="client/runtime.rs"
+use framework::*;
+
+#[derive(Default, Delegate)]
+pub struct Runtime {
+    #[to(TodoListStore, TodoListRepository)]
+    store: services::memstore::MemStore,
+}
+```
+</Tab>
+</Tabs>
+
+This `Runtime` struct becomes the backbone of your application's client layer, orchestrating the interactions between different components.
+
+## Utilizing Runtime
+
+Once defined, the runtime is instantiated in the main function of the client and passed to the execute function of commands and queries.
+
+### Execute Trait
+
+The `Execute` trait is a fundamental part of this process, defining how an operation is executed within the context of a given runtime.
+
+<Tabs items={['Rust']}>
+<Tab>
+```rust filename="traits/execute.rs"
+#[async_trait]
+pub trait Execute<R> {
+    type Output = ();
+    type Error: Display = AnyError;
+
+    async fn execute(&self, runtime: &R) -> Result<Self::Output, Self::Error>;
+}
+```
+</Tab>
+</Tabs>
+
+### Command Execution Example
+
+Here's an example of a command that utilizes a runtime to execute its operations:
+
+<Tabs items={['Rust']}>
+<Tab>
+```rust filename="commands/todo_list_command.rs"
+#[async_trait]
+impl<R> Execute<R> for Command
+where
+    R: TodoListRepository + TodoListStore + Send + Sync,
+{
+    async fn execute(&self, runtime: &R) -> AnyResult<()> {
+        let message = self.try_into()?;
+
+        // Pull the current state and apply the message
+        let todolist = TodoListStore::pull(runtime).await?;
+        let new_events = todolist.send(&message)?;
+        TodoListStore::push(runtime, &new_events).await?;
+
+        // Save the projection
+        let mut projection = TodoListRepository::fetch(runtime).await?;
+        projection.apply(&new_events);
+        TodoListRepository::save(runtime, &projection).await?;
+
+        Ok(())
+    }
+}
+```
+</Tab>
+</Tabs>
+
+In this example, the command interacts with the runtime to pull the current state, apply changes, and then save the updated state back through the store and repository.

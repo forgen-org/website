@@ -9,7 +9,7 @@ graph LR
 
 ```
 
-A **State** is a representation of a domain-specific object at a certain time. It should be a pure data structure, with no logic or behavior. It should be able to have a default implementation, which is the initial value. It is okay to have placeholder values for the default implementation. You can also use `Option<T>` to represent a value that is not yet available.
+A **State** is a representation of a domain-specific object at a certain time. Its role is to ensure the business rules are respected and produce **Events**. It should have a default implementation, which is the initial value. It is okay to have placeholder values for the default implementation. You can also use `Option<T>` to represent a value that is not yet available.
 
 - **Structure**: Primarily a straightforward object, characterized by its properties and data fields.
 - **Evolution**: Capable of evolving over time with [events](events.mdx).
@@ -21,9 +21,9 @@ A **State** is a representation of a domain-specific object at a certain time. I
 
 We want to represent a bank account for a very simple banking application. A bank account has a balance, a description, and an owner. We will use the exact same words to have a loyal representation of the domain.
 
-<Tabs items={['Rust', 'Typescript']}>
+<Tabs items={['Rust']}>
 <Tab>
-```rust filename="domain/account.rs"
+```rust filename="domain/account_state.rs"
 #[derive(Default, Debug)]
 pub struct BankAccount {
     pub balance: f64,
@@ -32,69 +32,58 @@ pub struct BankAccount {
 }
 ```
 </Tab>
+</Tabs>
+
+## Computing States
+
+You can build a new state by applying a sequence of events to an initial state. This is called event replay. **This process cannot fail**, as the events are immutable and cannot be changed. Thus, you should not change the events after they have been created. If you really need to, you can do event upcasting, which is a process of converting an event to a new version of the event or migrating existing data to the new model.
+
+<Tabs items={['Rust']}>
 <Tab>
-```typescript filename="domain/Account.ts"
-import { Option } from 'effect';
+```rust filename="domain/bankaccount_event.ts"
+use framework::*;
 
-export type BankAccount = {
-    balance: number;
-    description: string;
-    owner: Option<string>;
-}
-
-export const BankAccount = {
-    default: (): BankAccount => ({
-        balance: 0,
-        description: '',
-        owner: Option.none(),
-    }),
+impl Events<BankAccount> for Vec<BankAccountEvent> {
+  fn apply(&self, &mut state: BankAccount) {
+    for event in self {
+      match event {
+        BankAccountEvent::Deposited(amount) => state.balance += amount,
+        BankAccountEvent::Withdrawn(amount) => state.balance -= amount,
+      }
+    }
+  }
 }
 ```
 </Tab>
 </Tabs>
 
-## Using Newtypes
 
-It is recommended to use newtypes to represent domain-specific values. This will help you to avoid mixing up values of the same type. For example, a bank account balance is a `f64`, but a transaction amount is also a `f64`. If you use the same type for both, you might end up adding a transaction amount to a bank account balance, which is not what you want. We might also want our balance to have only two decimal places, so we can use a newtype to represent it.
+## Producing Events
 
-<Tabs items={['Rust', 'Typescript']}>
+Messages are processed with the state, which will either produce events or an error.
+
+<Tabs items={['Rust']}>
 <Tab>
-```rust filename="domain/bankaccount.rs"
-#[derive(Default, Debug)]
-pub struct Account {
-    pub balance: Balance,
-}
+```rust filename="domain/bankaccount_message.rs"
+use framework::*;
 
-#[derive(Default, Debug)]
-pub struct Balance(f64);
+impl Message<BankAccount> for BankAccountMessage {
+  type Error = BankAccountError;
+  type Events = BankAccountEvent;
 
-impl Balance {
-    pub fn parse(value: f64) -> Self {
-        let value = (value * 100.0).round() / 100.0;
-        Self(value)
+  fn send(&self, state: &BankAccount) -> Result<Self::Events, Self::Error> {
+    match self {
+      BankAccountMessage::Deposit(amount) => {
+        Ok(BankAccountEvent::AmountDeposited(*amount))
+      }
+      BankAccountMessage::Withdraw(amount) => {
+        if *amount > state.balance {
+          return Err(BankAccountError::NotEnoughFund);
+        }
+        Ok(BankAccountEvent::AmountWithdrawn(*amount))
+      }
     }
-}
-```
-</Tab>
-
-<Tab>
-```typescript filename="domain/BankAccount.ts"
-export type Account = {
-    balance: Balance,
-}
-
-export const Account = {
-    default: (): Account => ({
-        balance: Balance.default(),
-    }),
-}
-
-export type Balance = number & { _tag: 'Balance' };
-
-export const Balance = {
-    default: () => Balance.parse(0),
-
-    parse: (value: number): Balance => Math.round(value * 100) / 100 as Balance,
+  }
 }
 ```
 </Tab>

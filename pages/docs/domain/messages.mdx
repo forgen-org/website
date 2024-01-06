@@ -29,7 +29,7 @@ The message-handling mechanism is integral to maintaining the integrity and cons
 
 The message is the input to the system, and the event is the output. Messages are often mirrors of events. For example, if we have an event called `AmountWithdrawn` we might have a message called `WithdrawAmount`. This might not always be the case, for example we might have a message `UpdateBankAccount` that can produce multiple events, such as `CountryChanged` and `DescriptionUpdated`. Unlike events, it is totally okay to change messages as the system evolves as they are not used to reconstruct the state nor stored.
 
-<Tabs items={['Rust', 'Typescript']}>
+<Tabs items={['Rust']}>
 <Tab>
 ```rust filename="domain/bankaccount_message.rs"
 pub enum BankAccountMessage {
@@ -38,20 +38,13 @@ pub enum BankAccountMessage {
 }
 ```
 </Tab>
-<Tab>
-```typescript filename="domain/BankAccountMessage.ts"
-export type BankAccountMessage = 
-  | { _tag: 'Deposit', amount: number }
-  | { _tag: 'Withdraw', amount: number };
-```
-</Tab>
 </Tabs>
 
 ## Creating Errors
 
 Errors are used to communicate to the user that a business rule or state invariant has been violated. They should be self-explanatory and provide enough information to the user to understand what went wrong.
 
-<Tabs items={['Rust', 'Typescript']}>
+<Tabs items={['Rust']}>
 <Tab>
 ```rust filename="domain/bankaccount_error.rs"
 use framework::*;
@@ -60,61 +53,6 @@ use framework::*;
 pub enum BankAccountError {
   #[error("Not enough fund")]
   NotEnoughFund
-}
-```
-</Tab>
-<Tab>
-```typescript filename="domain/BankAccountError.ts"
-export type BankAccountError = { _tag: 'NotEnoughFund' };
-```
-</Tab>
-</Tabs>
-
-## Producing Events
-
-Messages are processed with the state, which will either produce events or an error.
-
-<Tabs items={['Rust', 'Typescript']}>
-<Tab>
-```rust filename="domain/bankaccount_message.rs"
-use framework::*;
-
-impl Message<BankAccount> for BankAccountMessage {
-  type Error = BankAccountError;
-  type Events = BankAccountEvent;
-
-  fn send(&self, state: &BankAccount) -> Result<Self::Events, Self::Error> {
-    match self {
-      BankAccountMessage::Deposit(amount) => {
-        Ok(BankAccountEvent::AmountDeposited(*amount))
-      }
-      BankAccountMessage::Withdraw(amount) => {
-        if *amount > state.balance {
-          return Err(BankAccountError::NotEnoughFund);
-        }
-        Ok(BankAccountEvent::AmountWithdrawn(*amount))
-      }
-    }
-  }
-}
-```
-</Tab>
-<Tab>
-```typescript filename="domain/BankAccountMessage.ts"
-import { Either } from 'effect';
-
-export const BankAccountMessage =  {
-  send: (message: BankAccountMessage) => (state: BankAccount): Either<BankAccountError, readonly BankAccountEvent[]> => {
-    switch (message._tag) {
-      case 'Deposit':
-       return Either.right([{ _tag: 'AmountDeposited', amount: message.amount }]);
-      case 'Withdraw':
-        if (message.amount > state.balance) {
-          return Either.left({ _tag: 'NotEnoughFund' });
-        }
-        return Either.right([{ _tag: 'AmountWithdrawn', amount: message.amount }]);
-    }
-  }
 }
 ```
 </Tab>

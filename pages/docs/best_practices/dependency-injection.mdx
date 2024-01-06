@@ -31,8 +31,15 @@ trait Service {
   fn hello(&self) -> String;
 }
 
-struct Client {
-  service: Box<dyn Service>,
+struct Client {}
+
+impl Client {
+  fn log_hello<S>(&self, service: S) -> String
+  where
+    S: Service,
+  {
+    println!("{:?}", service.hello());
+  }
 }
 
 struct SomeService;
@@ -44,30 +51,10 @@ impl Service for SomeService {
 }
 
 fn main() {
-  let service = Box::new(SomeService);
-  let client = Client { service };
+  let service = SomeService {};
+  let client = Client {};
+  client.log_hello(service);
 }
-```
-</Tab>
-
-<Tab>
-```ts
-type Service = {
-  hello: () => string
-}
-
-type Client = {
-  service: Service
-}
-
-const service: Service = {
-  hello: () => 'Hello World!'
-}
-
-const client: Client = {
-  service
-}
-
 ```
 </Tab>
 </Tabs>

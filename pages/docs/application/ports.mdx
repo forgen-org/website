@@ -24,7 +24,7 @@ Ports are implemented as interfaces or abstract classes, depending on the progra
 <Tab>
 ```rust filename="application/ports.rs"
 use framework::*;
-pub use domain::{BankAccount, BankAccountEvent}
+pub use domain::{BankAccount, BankAccountEvent};
 
 pub trait BankAccountStore {
     async fn get_account(&self, name: &str) -> AnyResult<BankAccount>;
