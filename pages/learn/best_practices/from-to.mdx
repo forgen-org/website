@@ -1,4 +1,4 @@
-import { Callout, Tabs, Tab } from "nextra/components"
+import { Callout, Tabs } from "nextra/components"
 
 <Callout type="warning" emoji="⚠️">
   Work in progress.
@@ -18,73 +18,10 @@ Leveraging the From/To pattern is akin to preferring Dependency Injection over e
 
 ## How to Implement
 
-### Rust Example
-
-<Tabs items={['Rust', 'Typescript']}>
+<Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust
-trait ToJSON {
-    fn to_json(&self) -> String;
-}
-
-struct Command {
-value: String,
-}
-
-impl ToJSON for Command {
-fn to_json(&self) -> String {
-format!("{{\"value\": \"{}\"}}", self.value)
-}
-}
-
-struct Aggregate {
-commands: Vec<Command>,
-}
-
-impl ToJSON for Aggregate {
-fn to_json(&self) -> String {
-let json_commands: Vec<String> = self.commands.iter().map(|cmd| cmd.to_json()).collect();
-format!("[{}]", json_commands.join(","))
-}
-}
-
-fn main() {
-let command = Command { value: "Create".to_string() };
-let aggregate = Aggregate { commands: vec![command] };
-println!("{}", aggregate.to_json()); // Outputs: [{"value": "Create"}]
-}
-
-````
-</Tabs.Tab>
-
-### Typescript Example
-<Tabs.Tab>
-```ts
-interface ToJSON {
-    toJSON(): string;
-}
-
-class Command implements ToJSON {
-    constructor(private value: string) {}
-
-    toJSON(): string {
-        return `{"value": "${this.value}"}`;
-    }
-}
-
-class Aggregate implements ToJSON {
-    constructor(private commands: Command[]) {}
-
-    toJSON(): string {
-        return `[${this.commands.map(cmd => cmd.toJSON()).join(",")}]`;
-    }
-}
-
-const command = new Command("Create");
-const aggregate = new Aggregate([command]);
-console.log(aggregate.toJSON()); // Outputs: [{"value": "Create"}]
-````
-
+```rust file=<rootDir>/domain/src/todolist_scalar.rs#L3-L10
+```
 </Tabs.Tab>
 </Tabs>
 

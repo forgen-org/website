@@ -25,44 +25,9 @@ Given the context, we prefer using the `Result` type over `try-catch` or `throws
 
 ## How to Implement
 
-<Tabs items={['Rust', 'Typescript']}>
+<Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust
-// In Rust, the Result type is commonly used for error handling.
-
-fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
-if denominator == 0.0 {
-Err("Cannot divide by zero".to_string())
-} else {
-Ok(numerator / denominator)
-}
-}
-
-````
-</Tabs.Tab>
-
-<Tabs.Tab>
-```ts
-// In TypeScript, there is no built-in Result type, but we can create one.
-
-type Result<A, E> = Ok<A> | Err<E>;
-
-type Ok<A> = { _tag: 'Ok', value: A };
-type Err<E> = { _tag: 'Err', error: E };
-
-const Result = {
-  ok: <T, E>(value: T): Ok<T> => ({ _tag: 'Ok', value }),
-  err: <T, E>(error: E): Err<E> => ({ _tag: 'Err', error }),
-}
-
-function divide(numerator: number, denominator: number): Result<number, string> {
-  if (denominator === 0) {
-    return Result.err("Cannot divide by zero");
-  } else {
-    return Result.ok(numerator / denominator);
-  }
-}
-````
-
+```rust file=<rootDir>/domain/src/todolist_scalar.rs#L30-L36
+```
 </Tabs.Tab>
 </Tabs>

@@ -1,4 +1,4 @@
-import { Callout, Tabs, Tab } from "nextra/components"
+import { Callout, Tabs } from "nextra/components"
 
 <Callout type="warning" emoji="⚠️">
   Work in progress.
@@ -18,83 +18,10 @@ Embracing the Newtype pattern is essential for writing clear and error-resistant
 
 ## How to Implement
 
-### Rust Example
-
-<Tabs items={['Rust', 'Typescript']}>
+<Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust
-#[derive(Debug, PartialEq)]
-struct PositiveInteger(u64);
-
-impl PositiveInteger {
-fn new(value: u64) -> Result<PositiveInteger, &'static str> {
-if value > 0 {
-Ok(PositiveInteger(value))
-} else {
-Err("Value must be a positive integer")
-}
-}
-}
-
-#[derive(Debug, PartialEq)]
-struct NonZeroNumber(i64);
-
-impl NonZeroNumber {
-fn new(value: i64) -> Result<NonZeroNumber, &'static str> {
-if value != 0 {
-Ok(NonZeroNumber(value))
-} else {
-Err("Value must be a non-zero number")
-}
-}
-}
-
-fn main() {
-let positive_integer = PositiveInteger::new(10).unwrap();
-let non_zero_number = NonZeroNumber::new(-5).unwrap();
-
-    println!("{:?}", positive_integer); // Outputs: PositiveInteger(10)
-    println!("{:?}", non_zero_number); // Outputs: NonZeroNumber(-5)
-
-}
-
-````
-</Tabs.Tab>
-
-### Typescript Example
-<Tabs.Tab>
-```ts
-class PositiveInteger {
-    constructor(private value: number) {
-        if (value <= 0) {
-            throw new Error("Value must be a positive integer");
-        }
-    }
-
-    getValue() {
-        return this.value;
-    }
-}
-
-class NonZeroNumber {
-    constructor(private value: number) {
-        if (value === 0) {
-            throw new Error("Value must be a non-zero number");
-        }
-    }
-
-    getValue() {
-        return this.value;
-    }
-}
-
-const positiveInteger = new PositiveInteger(10);
-console.log(positiveInteger.getValue()); // Outputs: 10
-
-const nonZeroNumber = new NonZeroNumber(-5);
-console.log(nonZeroNumber.getValue()); // Outputs: -5
-````
-
+```rust file=<rootDir>/domain/src/todolist_scalar.rs#L24-L37
+```
 </Tabs.Tab>
 </Tabs>
 
