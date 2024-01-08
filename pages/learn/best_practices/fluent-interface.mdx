@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Adopting Fluent Interfaces over OOP and FP
 
@@ -30,7 +30,7 @@ We decided to adopt Fluent Interfaces as our main design pattern. Fluent Interfa
 ## How to Implement
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 // Data
 struct User {
@@ -59,8 +59,8 @@ let user = User { name: "John".to_string() };
 user.change_name("James").say_hi();
 
 ````
-</Tab>
-<Tab>
+</Tabs.Tab>
+<Tabs.Tab>
 ```ts
 // Data
 type UserData = {
@@ -86,7 +86,7 @@ const user = User.create({ name: "John" })
 user.changeName("James").sayHi()
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## References

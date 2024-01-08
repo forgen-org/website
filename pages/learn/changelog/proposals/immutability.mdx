@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Using Immutability over Mutability
 
@@ -23,7 +23,7 @@ Preferring immutability often yields more predictable and maintainable code by m
 ## How to Implement
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 struct Point {
   x: i32,
@@ -47,8 +47,8 @@ y: new_y,
 }
 
 ````
-</Tab>
-<Tab>
+</Tabs.Tab>
+<Tabs.Tab>
 ```ts
 type Point = {
   // We use the readonly keyword to make sure the properties are immutable
@@ -63,13 +63,13 @@ const Point = {
 }
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Performance Check
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 use std::time::Instant;
 
@@ -124,8 +124,8 @@ immutable_simulation();
   \*/
 
 ````
-</Tab>
-<Tab>
+</Tabs.Tab>
+<Tabs.Tab>
 ```ts
 const { performance } = require('perf_hooks');
 
@@ -180,5 +180,5 @@ immutableSimulation();
  */
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>

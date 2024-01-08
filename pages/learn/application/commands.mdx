@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Commands
 
@@ -25,7 +25,7 @@ Commands describe an intent to change the system's state. They have side-effects
 It is recommended to create a command for each application use case.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="application/commands.rs"
 #[derive(Debug, Deserialize)]
 pub struct TransferAmountCommand {
@@ -34,13 +34,13 @@ pub struct TransferAmountCommand {
   to: String,
 }
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Implementing Commands
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="application/commands.rs"
 use framework::*;
 
@@ -73,7 +73,7 @@ let from_account = runtime
 }
 
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Updating Projections

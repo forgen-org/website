@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Messages
 
@@ -29,14 +29,14 @@ The message-handling mechanism is integral to maintaining the integrity and cons
 The message is the input to the system, and the event is the output. Messages are often mirrors of events. For example, if we have an event called `AmountWithdrawn` we might have a message called `WithdrawAmount`. This might not always be the case, for example we might have a message `UpdateBankAccount` that can produce multiple events, such as `CountryChanged` and `DescriptionUpdated`. Unlike events, it is totally okay to change messages as the system evolves as they are not used to reconstruct the state nor stored.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/bankaccount_message.rs"
 pub enum BankAccountMessage {
   Deposit(f64),
   Withdraw(f64),
 }
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Creating Errors
@@ -44,7 +44,7 @@ pub enum BankAccountMessage {
 Errors are used to communicate to the user that a business rule or state invariant has been violated. They should be self-explanatory and provide enough information to the user to understand what went wrong.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/bankaccount_error.rs"
 use framework::*;
 
@@ -54,6 +54,6 @@ NotEnoughFund
 }
 
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 ```

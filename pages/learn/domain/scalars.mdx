@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Scalars
 
@@ -9,7 +9,7 @@ Scalars are the basic building blocks of a domain model. They are the primitive 
 It is recommended to use newtypes to represent domain-specific values. This will help you to avoid mixing up values of the same type. For example, a bank account balance is a `f64`, but a transaction amount is also a `f64`. If you use the same type for both, you might end up adding a transaction amount to a bank account balance, which is not what you want. We might also want our balance to have only two decimal places, so we can use a newtype to represent it.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/bankaccount_scalars.rs"
 #[derive(Default, Debug)]
 pub struct Account {
@@ -27,6 +27,6 @@ Self(value)
 }
 
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 ```

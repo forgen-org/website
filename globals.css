@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Overriding default Nextra color scheme */
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 3, 7, 18;
+    --background-end-rgb: 17, 24, 39;
+  }
+}
+
+:is(html[class~=dark] body) {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+:is(html[class~=dark] .nextra-nav-container-blur) {
+  background: var(--background-start-rgb)!important;
+}
+
+:is(html[class~=dark] .dark\:_bg-dark) {
+  background: transparent!important;
+  box-shadow: none!important;
+}
+
+:is(html[class~=dark] .dark\:_border-neutral-800) {
+  border-color: rgba(255, 255, 255, 0.1)!important;
+}
+
+/* Overriding default Mermaid color scheme  */
+svg .node rect, svg .node circle, svg .node ellipse, svg .node polygon, svg .node path {
+  fill: #030718!important;
+}

@@ -21,7 +21,7 @@ Leveraging the From/To pattern is akin to preferring Dependency Injection over e
 ### Rust Example
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 trait ToJSON {
     fn to_json(&self) -> String;
@@ -55,10 +55,10 @@ println!("{}", aggregate.to_json()); // Outputs: [{"value": "Create"}]
 }
 
 ````
-</Tab>
+</Tabs.Tab>
 
 ### Typescript Example
-<Tab>
+<Tabs.Tab>
 ```ts
 interface ToJSON {
     toJSON(): string;
@@ -85,7 +85,7 @@ const aggregate = new Aggregate([command]);
 console.log(aggregate.toJSON()); // Outputs: [{"value": "Create"}]
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Conclusion

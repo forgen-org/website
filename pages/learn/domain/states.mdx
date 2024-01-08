@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # States
 
@@ -22,7 +22,7 @@ A **State** is a representation of a domain-specific object at a certain time. I
 We want to represent a bank account for a very simple banking application. A bank account has a balance, a description, and an owner. We will use the exact same words to have a loyal representation of the domain.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/account_state.rs"
 #[derive(Default, Debug)]
 pub struct BankAccount {
@@ -31,7 +31,7 @@ pub struct BankAccount {
     pub owner: Option<String>
 }
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Computing States
@@ -39,7 +39,7 @@ pub struct BankAccount {
 You can build a new state by applying a sequence of events to an initial state. This is called event replay. **This process cannot fail**, as the events are immutable and cannot be changed. Thus, you should not change the events after they have been created. If you really need to, you can do event upcasting, which is a process of converting an event to a new version of the event or migrating existing data to the new model.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/bankaccount_event.ts"
 use framework::*;
 
@@ -55,7 +55,7 @@ BankAccountEvent::Withdrawn(amount) => state.balance -= amount,
 }
 
 ````
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 
@@ -64,7 +64,7 @@ BankAccountEvent::Withdrawn(amount) => state.balance -= amount,
 Messages are processed with the state, which will either produce events or an error.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/bankaccount_message.rs"
 use framework::*;
 
@@ -88,5 +88,5 @@ impl Message<BankAccount> for BankAccountMessage {
 }
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>

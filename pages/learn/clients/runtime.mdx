@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Runtime
 
@@ -19,7 +19,7 @@ The runtime serves as the execution context for your application's operations. I
 Creating a runtime involves defining a struct that includes all the necessary traits and services your application requires. Here's an example of how you might define a runtime in Rust using the delegate pattern:
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="client/runtime.rs"
 use framework::*;
 
@@ -29,7 +29,7 @@ store: services::memstore::MemStore,
 }
 
 ````
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 This `Runtime` struct becomes the backbone of your application's client layer, orchestrating the interactions between different components.
@@ -43,7 +43,7 @@ Once defined, the runtime is instantiated in the main function of the client and
 The `Execute` trait is a fundamental part of this process, defining how an operation is executed within the context of a given runtime.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="traits/execute.rs"
 #[async_trait]
 pub trait Execute<R> {
@@ -54,7 +54,7 @@ pub trait Execute<R> {
 }
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ### Command Execution Example
@@ -62,7 +62,7 @@ pub trait Execute<R> {
 Here's an example of a command that utilizes a runtime to execute its operations:
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="commands/todo_list_command.rs"
 #[async_trait]
 impl<R> Execute<R> for Command
@@ -88,7 +88,7 @@ where
 }
 
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 In this example, the command interacts with the runtime to pull the current state, apply changes, and then save the updated state back through the store and repository.

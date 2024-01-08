@@ -21,7 +21,7 @@ Embracing the Newtype pattern is essential for writing clear and error-resistant
 ### Rust Example
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 #[derive(Debug, PartialEq)]
 struct PositiveInteger(u64);
@@ -59,10 +59,10 @@ let non_zero_number = NonZeroNumber::new(-5).unwrap();
 }
 
 ````
-</Tab>
+</Tabs.Tab>
 
 ### Typescript Example
-<Tab>
+<Tabs.Tab>
 ```ts
 class PositiveInteger {
     constructor(private value: number) {
@@ -95,7 +95,7 @@ const nonZeroNumber = new NonZeroNumber(-5);
 console.log(nonZeroNumber.getValue()); // Outputs: -5
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Conclusion

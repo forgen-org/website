@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Ports
 
@@ -21,7 +21,7 @@ Ports are one of the key components that facilitate the separation of concerns, 
 Ports are implemented as interfaces or abstract classes, depending on the programming language used.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="application/ports.rs"
 use framework::*;
 pub use domain::{BankAccount, BankAccountEvent};
@@ -32,6 +32,6 @@ async fn push_account(&self, name: &str, events: &[BankAccountEvent]) -> AnyResu
 }
 
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 ```

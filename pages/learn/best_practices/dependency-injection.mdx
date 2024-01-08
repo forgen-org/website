@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Prefer Dependency Injection over Explicit Import
 
@@ -25,7 +25,7 @@ Given the context, we prefer using Dependency Injection over explicit import. De
 ## How to Implement
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 trait Service {
   fn hello(&self) -> String;
@@ -57,6 +57,6 @@ client.log_hello(service);
 }
 
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>
 ```

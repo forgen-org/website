@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Prefer Result Type over try-catch
 
@@ -26,7 +26,7 @@ Given the context, we prefer using the `Result` type over `try-catch` or `throws
 ## How to Implement
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 // In Rust, the Result type is commonly used for error handling.
 
@@ -39,9 +39,9 @@ Ok(numerator / denominator)
 }
 
 ````
-</Tab>
+</Tabs.Tab>
 
-<Tab>
+<Tabs.Tab>
 ```ts
 // In TypeScript, there is no built-in Result type, but we can create one.
 
@@ -64,5 +64,5 @@ function divide(numerator: number, denominator: number): Result<number, string> 
 }
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>

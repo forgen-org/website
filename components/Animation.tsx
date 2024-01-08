@@ -14,7 +14,7 @@ export const Animation = ({ children }) => (
       <li></li>
       <li></li>
     </ul>
-    <div className="flex p-5 flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center p-5">
       {children}
     </div>
   </div>

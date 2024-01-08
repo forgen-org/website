@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Choosing Event Sourcing over State Mutation for Persistence
 
@@ -36,7 +36,7 @@ We advocate for using event sourcing as a persistence method over state mutation
 ## How to Implement
 
 <Tabs items={['Rust', 'Typescript']}>
-<Tab>
+<Tabs.Tab>
 ```rust
 enum AccountEvent {
   Deposited(u64),
@@ -81,8 +81,8 @@ AccountEvent::Withdrawn(amount) => self.balance - amount,
 }
 
 ````
-</Tab>
-<Tab>
+</Tabs.Tab>
+<Tabs.Tab>
 ```ts
 type AccountEvent = { type: 'Deposited', amount: number } | { type: 'Withdrawn', amount: number };
 
@@ -111,5 +111,5 @@ const apply = (account: Account, event: AccountEvent): Account => {
 };
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>

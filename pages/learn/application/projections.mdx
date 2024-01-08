@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Projections
 
@@ -20,7 +20,7 @@ Projections are used to create read models or views from the series of events or
 ## Implementation of Projections
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="application/projections.rs"
 #[derive(Clone, Default, Debug, Serialize, Deserialize)]
 pub struct MonthlyBalanceProjection {
@@ -30,5 +30,5 @@ pub struct MonthlyBalanceProjection {
     pub balance: f64,
 }
 ```
-</Tab>
+</Tabs.Tab>
 </Tabs>

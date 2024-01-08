@@ -1,4 +1,4 @@
-import { Tabs, Tab } from "nextra/components"
+import { Tabs } from "nextra/components"
 
 # Events
 
@@ -28,7 +28,7 @@ In traditional state mutation for persistence, the system's state is directly up
 Events should be the representation of real domain events. You should define them by talking to a domain expert or using techniques like [event storming](https://en.wikipedia.org/wiki/Event_storming). In our banking example, an event could be a deposit or a withdrawal.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/bankaccount_event.ts"
 enum BankAccountEvent {
   Deposited(Amount),
@@ -38,7 +38,7 @@ enum BankAccountEvent {
 struct Amount(f64);
 
 ````
-</Tab>
+</Tabs.Tab>
 </Tabs>
 
 ## Serializing Events
@@ -46,7 +46,7 @@ struct Amount(f64);
 Because events will be stored in a database, they should be serializable. In Rust, you can use the `serde` crate to derive the `Serialize` and `Deserialize` traits.
 
 <Tabs items={['Rust']}>
-<Tab>
+<Tabs.Tab>
 ```rust filename="domain/bankaccount_event.ts"
 use serde::{Serialize, Deserialize};
 
@@ -56,5 +56,5 @@ enum BankAccountEvent {
 }
 ````
 
-</Tab>
+</Tabs.Tab>
 </Tabs>
