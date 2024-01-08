@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Prefer Dependency Injection over Explicit Import
 
@@ -34,27 +34,29 @@ trait Service {
 struct Client {}
 
 impl Client {
-  fn log_hello<S>(&self, service: S) -> String
-  where
-    S: Service,
-  {
-    println!("{:?}", service.hello());
-  }
+fn log_hello<S>(&self, service: S) -> String
+where
+S: Service,
+{
+println!("{:?}", service.hello());
+}
 }
 
 struct SomeService;
 
 impl Service for SomeService {
-  fn hello(&self) -> String {
-    "Hello World!".to_string()
-  }
+fn hello(&self) -> String {
+"Hello World!".to_string()
+}
 }
 
 fn main() {
-  let service = SomeService {};
-  let client = Client {};
-  client.log_hello(service);
+let service = SomeService {};
+let client = Client {};
+client.log_hello(service);
 }
+
 ```
 </Tab>
 </Tabs>
+```

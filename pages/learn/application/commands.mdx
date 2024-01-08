@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Commands
 
@@ -45,15 +45,15 @@ pub struct TransferAmountCommand {
 use framework::*;
 
 #[async_trait]
-impl<R> Command<R> for TransferAmountCommand 
-where 
-  R: BankAccountStore + Send + Sync
+impl<R> Command<R> for TransferAmountCommand
+where
+R: BankAccountStore + Send + Sync
 {
-  async fn execute(&self, runtime: &R) -> AnyResult<()> {
-    // Get accounts state from the store
-    let from_account = runtime
-      .get_account(&self.from)
-      .await?;
+async fn execute(&self, runtime: &R) -> AnyResult<()> {
+// Get accounts state from the store
+let from_account = runtime
+.get_account(&self.from)
+.await?;
 
     let to_account = runtime
       .get_account(&self.to)
@@ -68,10 +68,13 @@ where
     runtime.push_events(&self.to, to_events).await?;
 
     Ok(())
-  }
+
 }
+}
+
 ```
 </Tab>
 </Tabs>
 
 ## Updating Projections
+```

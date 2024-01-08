@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components"
 
 # Domain Logic Ownership
 
@@ -21,7 +21,7 @@ trait State {
 When doing Dependency Injection, following Effect principles, it is preferable to use the context at the last moment so that basic elements can be built and exchanged.
 
 ```rust
-// ✅ Good 
+// ✅ Good
 struct Command {} // Can be built without knowing the context
 
 impl Command {
@@ -38,4 +38,6 @@ In our case, the `Event` is the basic element and the `State` is the context. Th
 
 However, we also have `Projection` that need to apply events and we cannot implement `Vec<Event>` from the application layer.
 
-<Callout emoji="💡">We need to implement `apply` on `State` and `Projection`.</Callout>
+<Callout emoji="💡">
+  We need to implement `apply` on `State` and `Projection`.
+</Callout>

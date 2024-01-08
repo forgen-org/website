@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Messages
 
@@ -23,7 +23,6 @@ In event-sourced systems, messages play a pivotal role in driving application be
 - **Event Generation or Error Handling**: Upon processing, a message will either result in the generation of events or an error, contingent on the business rule validation.
 
 The message-handling mechanism is integral to maintaining the integrity and consistency of the system. By encapsulating business logic, messages ensure that the state transitions are valid, logical, and traceable. This approach not only enhances the system's reliability but also provides a clear audit trail for every state change.
-
 
 ## Creating Messages
 
@@ -50,10 +49,11 @@ Errors are used to communicate to the user that a business rule or state invaria
 use framework::*;
 
 #[derive(Debug, Error)]
-pub enum BankAccountError {
-  #[error("Not enough fund")]
-  NotEnoughFund
+pub enum BankAccountError { #[error("Not enough fund")]
+NotEnoughFund
 }
+
 ```
 </Tab>
 </Tabs>
+```

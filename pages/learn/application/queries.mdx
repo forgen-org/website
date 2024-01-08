@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Queries
 
@@ -45,12 +45,14 @@ use framework::*;
 #[async_trait]
 impl<R> Query<R> for GetAccountBalanceQuery
 where
-  R: AccountReadModel
+R: AccountReadModel
 {
-    async fn execute(&self, runtime: &R) -> AnyResult<AccountBalance> {
-        runtime.get_account_balance(&self.account_id).await
-    }
+async fn execute(&self, runtime: &R) -> AnyResult<AccountBalance> {
+runtime.get_account_balance(&self.account_id).await
 }
+}
+
 ```
 </Tab>
 </Tabs>
+```

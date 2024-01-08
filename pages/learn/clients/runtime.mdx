@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Runtime
 
@@ -24,11 +24,11 @@ Creating a runtime involves defining a struct that includes all the necessary tr
 use framework::*;
 
 #[derive(Default, Delegate)]
-pub struct Runtime {
-    #[to(TodoListStore, TodoListRepository)]
-    store: services::memstore::MemStore,
+pub struct Runtime { #[to(TodoListStore, TodoListRepository)]
+store: services::memstore::MemStore,
 }
-```
+
+````
 </Tab>
 </Tabs>
 
@@ -52,7 +52,8 @@ pub trait Execute<R> {
 
     async fn execute(&self, runtime: &R) -> Result<Self::Output, Self::Error>;
 }
-```
+````
+
 </Tab>
 </Tabs>
 
@@ -83,9 +84,12 @@ where
 
         Ok(())
     }
+
 }
+
 ```
 </Tab>
 </Tabs>
 
 In this example, the command interacts with the runtime to pull the current state, apply changes, and then save the updated state back through the store and repository.
+```

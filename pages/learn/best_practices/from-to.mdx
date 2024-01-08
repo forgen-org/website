@@ -1,4 +1,4 @@
-import { Callout, Tabs, Tab } from 'nextra/components'
+import { Callout, Tabs, Tab } from "nextra/components"
 
 <Callout type="warning" emoji="⚠️">
   Work in progress.
@@ -19,6 +19,7 @@ Leveraging the From/To pattern is akin to preferring Dependency Injection over e
 ## How to Implement
 
 ### Rust Example
+
 <Tabs items={['Rust', 'Typescript']}>
 <Tab>
 ```rust
@@ -27,32 +28,33 @@ trait ToJSON {
 }
 
 struct Command {
-    value: String,
+value: String,
 }
 
 impl ToJSON for Command {
-    fn to_json(&self) -> String {
-        format!("{{\"value\": \"{}\"}}", self.value)
-    }
+fn to_json(&self) -> String {
+format!("{{\"value\": \"{}\"}}", self.value)
+}
 }
 
 struct Aggregate {
-    commands: Vec<Command>,
+commands: Vec<Command>,
 }
 
 impl ToJSON for Aggregate {
-    fn to_json(&self) -> String {
-        let json_commands: Vec<String> = self.commands.iter().map(|cmd| cmd.to_json()).collect();
-        format!("[{}]", json_commands.join(","))
-    }
+fn to_json(&self) -> String {
+let json_commands: Vec<String> = self.commands.iter().map(|cmd| cmd.to_json()).collect();
+format!("[{}]", json_commands.join(","))
+}
 }
 
 fn main() {
-    let command = Command { value: "Create".to_string() };
-    let aggregate = Aggregate { commands: vec![command] };
-    println!("{}", aggregate.to_json()); // Outputs: [{"value": "Create"}]
+let command = Command { value: "Create".to_string() };
+let aggregate = Aggregate { commands: vec![command] };
+println!("{}", aggregate.to_json()); // Outputs: [{"value": "Create"}]
 }
-```
+
+````
 </Tab>
 
 ### Typescript Example
@@ -81,7 +83,8 @@ class Aggregate implements ToJSON {
 const command = new Command("Create");
 const aggregate = new Aggregate([command]);
 console.log(aggregate.toJSON()); // Outputs: [{"value": "Create"}]
-```
+````
+
 </Tab>
 </Tabs>
 

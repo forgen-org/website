@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Adopting Fluent Interfaces over OOP and FP
 
@@ -39,24 +39,26 @@ struct User {
 
 // Logic
 trait UserTrait {
-    fn change_name(&mut self, name: String) -> Self;
-    fn say_hi(&self) -> ();
+fn change_name(&mut self, name: String) -> Self;
+fn say_hi(&self) -> ();
 }
 
 // Implementation
 impl UserTrait for User {
-    fn change_name(&self, name: String) -> Self {
-        User { name: name.to_string() }
-    }
-    
+fn change_name(&self, name: String) -> Self {
+User { name: name.to_string() }
+}
+
     fn say_hi(&self) -> () {
         println!("Hi {}!", self.name);
     }
+
 }
 
 let user = User { name: "John".to_string() };
 user.change_name("James").say_hi();
-```
+
+````
 </Tab>
 <Tab>
 ```ts
@@ -82,7 +84,8 @@ const User = {
 
 const user = User.create({ name: "John" })
 user.changeName("James").sayHi()
-```
+````
+
 </Tab>
 </Tabs>
 

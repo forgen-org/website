@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Scalars
 
@@ -20,11 +20,13 @@ pub struct Account {
 pub struct Balance(f64);
 
 impl Balance {
-    pub fn parse(value: f64) -> Self {
-        let value = (value * 100.0).round() / 100.0;
-        Self(value)
-    }
+pub fn parse(value: f64) -> Self {
+let value = (value \* 100.0).round() / 100.0;
+Self(value)
 }
+}
+
 ```
 </Tab>
 </Tabs>
+```

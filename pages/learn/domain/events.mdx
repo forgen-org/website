@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Events
 
@@ -14,7 +14,7 @@ flowchart LR
   Apply --> NewState
 ```
 
-In traditional state mutation for persistence, the system's state is directly updated and overwritten in the data store. This makes it challenging to reconstruct past states or understand the history and reasons behind state changes. In contrast, event sourcing persists the state of a business entity as a sequence of state-changing events. Each state change is stored as a separate event, allowing for a comprehensive history of state transformations, easy debugging, and complex business logic support. 
+In traditional state mutation for persistence, the system's state is directly updated and overwritten in the data store. This makes it challenging to reconstruct past states or understand the history and reasons behind state changes. In contrast, event sourcing persists the state of a business entity as a sequence of state-changing events. Each state change is stored as a separate event, allowing for a comprehensive history of state transformations, easy debugging, and complex business logic support.
 
 - **Auditability**: Records every change, ensuring full traceability.
 - **Replayability**: Enables state reconstruction, aiding in debugging and analysis.
@@ -25,7 +25,7 @@ In traditional state mutation for persistence, the system's state is directly up
 
 ## Creating Events
 
-Events should be the representation of real domain events. You should define them by talking to a domain expert or using techniques like [event storming](https://en.wikipedia.org/wiki/Event_storming). In our banking example, an event could be a deposit or a withdrawal. 
+Events should be the representation of real domain events. You should define them by talking to a domain expert or using techniques like [event storming](https://en.wikipedia.org/wiki/Event_storming). In our banking example, an event could be a deposit or a withdrawal.
 
 <Tabs items={['Rust']}>
 <Tab>
@@ -36,7 +36,8 @@ enum BankAccountEvent {
 }
 
 struct Amount(f64);
-```
+
+````
 </Tab>
 </Tabs>
 
@@ -53,6 +54,7 @@ use serde::{Serialize, Deserialize};
 enum BankAccountEvent {
   ...
 }
-```
+````
+
 </Tab>
 </Tabs>

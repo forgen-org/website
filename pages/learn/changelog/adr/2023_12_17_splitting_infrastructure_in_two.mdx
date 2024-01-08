@@ -1,5 +1,4 @@
-
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components"
 
 # Split of infastructure layer into clients and services
 
@@ -31,4 +30,8 @@ Take the Discord bot as an example. It necessitates its own HTTP server for even
 
 As we expand to multiple platforms, each with its unique configurations and requirements, managing them becomes complex. This is where multi-clients architecture shines (similar to microservices). It allows us to deploy each client independently, with a centralized gateway efficiently handling different ports and routes.
 
-<Callout emoji="💡">Splitting clients from services is not just a choice - it's a necessity for the seamless deployment and management of our diverse, multi-platform chatbot application.</Callout>
+<Callout emoji="💡">
+  Splitting clients from services is not just a choice - it's a necessity for
+  the seamless deployment and management of our diverse, multi-platform chatbot
+  application.
+</Callout>

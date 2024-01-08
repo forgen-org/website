@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Using Immutability over Mutability
 
@@ -31,21 +31,22 @@ struct Point {
 }
 
 impl Point {
-  // Create a new Point with updated x value, without mutating the original
-  fn set_x(&self, new_x: i32) -> Point {
-    Point {
-      x: new_x,
-      y: self.y,
-    }
-  }
-  fn set_y(&self, new_y: i32) -> Point {
-    Point {
-      x: self.x,
-      y: new_y,
-    }
-  }
+// Create a new Point with updated x value, without mutating the original
+fn set_x(&self, new_x: i32) -> Point {
+Point {
+x: new_x,
+y: self.y,
 }
-```
+}
+fn set_y(&self, new_y: i32) -> Point {
+Point {
+x: self.x,
+y: new_y,
+}
+}
+}
+
+````
 </Tab>
 <Tab>
 ```ts
@@ -60,7 +61,8 @@ const Point = {
   setX: (point: Point, x: number): Point => ({ ...point, x }),
   setY: (point: Point, y: number): Point => ({ ...point, y }),
 }
-```
+````
+
 </Tab>
 </Tabs>
 
@@ -72,54 +74,56 @@ const Point = {
 use std::time::Instant;
 
 fn mutable_simulation() {
-  let start = Instant::now();
+let start = Instant::now();
 
-  let mut user = User { name: String::from("John") };
+let mut user = User { name: String::from("John") };
 
-  for i in 0..1_000_000 {
-    if i % 2 == 0 {
-      user.name = String::from("John");
-    } else {
-      user.name = String::from("Jane");
-    }
-  }
+for i in 0..1_000_000 {
+if i % 2 == 0 {
+user.name = String::from("John");
+} else {
+user.name = String::from("Jane");
+}
+}
 
-  let duration = start.elapsed();
-  println!("Time elapsed in mutable operation is: {:?}", duration);
+let duration = start.elapsed();
+println!("Time elapsed in mutable operation is: {:?}", duration);
 }
 
 fn immutable_simulation() {
-  let start = Instant::now();
+let start = Instant::now();
 
-  let mut user = User { name: String::from("John") };
+let mut user = User { name: String::from("John") };
 
-  for i in 0..1_000_000 {
-    if i % 2 == 0 {
-      user = User { name: String::from("John") };
-    } else {
-      user = User { name: String::from("Jane") };
-    }
-  }
+for i in 0..1_000_000 {
+if i % 2 == 0 {
+user = User { name: String::from("John") };
+} else {
+user = User { name: String::from("Jane") };
+}
+}
 
-  let duration = start.elapsed();
-  println!("Time elapsed in immutable operation is: {:?}", duration);
+let duration = start.elapsed();
+println!("Time elapsed in immutable operation is: {:?}", duration);
 }
 
 #[derive(Debug)]
 struct User {
-  name: String,
+name: String,
 }
 
 fn main() {
-  mutable_simulation();
-  immutable_simulation();
+mutable_simulation();
+immutable_simulation();
 }
 
-/**
- * Time elapsed in mutable operation is: 150.991897ms
- * Time elapsed in immutable operation is: 137.375402ms
- */
-```
+/\*\*
+
+- Time elapsed in mutable operation is: 150.991897ms
+- Time elapsed in immutable operation is: 137.375402ms
+  \*/
+
+````
 </Tab>
 <Tab>
 ```ts
@@ -174,6 +178,7 @@ immutableSimulation();
  * Time elapsed in mutable operation is: 2.7600000000020373 ms
  * Time elapsed in immutable operation is: 2.470000000001164 ms
  */
-```
+````
+
 </Tab>
 </Tabs>

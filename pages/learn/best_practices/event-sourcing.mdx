@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Choosing Event Sourcing over State Mutation for Persistence
 
@@ -21,7 +21,7 @@ flowchart LR
   State --> Apply
   Event --> Apply
   Apply --> NewState
-  
+
 Events -- Pop --> Event
 ```
 
@@ -44,41 +44,43 @@ enum AccountEvent {
 }
 
 struct Account {
-  balance: u64,
+balance: u64,
 }
 
 impl Account {
-  fn new() -> Self {
-    Account {
-      balance: 0,
-    }
-  }
+fn new() -> Self {
+Account {
+balance: 0,
+}
+}
 
-  // Decision function: Decides what event should occur based on the action
-  fn withdraw(&self, amount: u64) -> Result<Vec<AccountEvent>, String> {
-    if self.balance < amount 
-        Err("Insufficient funds".to_string())
-    else
-        Ok(vec![AccountEvent::Withdrawn(amount)])
-  }
+// Decision function: Decides what event should occur based on the action
+fn withdraw(&self, amount: u64) -> Result<Vec<AccountEvent>, String> {
+if self.balance < amount
+Err("Insufficient funds".to_string())
+else
+Ok(vec![AccountEvent::Withdrawn(amount)])
+}
 
-  fn deposit(&self, amount: u64) -> Result<Vec<AccountEvent>, String> {
-    Ok(vec![AccountEvent::Deposited(amount)])
-  }
+fn deposit(&self, amount: u64) -> Result<Vec<AccountEvent>, String> {
+Ok(vec![AccountEvent::Deposited(amount)])
+}
 
-  // Evolution function: Evolves the state based on the event
-  fn apply(self, event: AccountEvent) -> Self {
-    let new_balance = match event {
-      AccountEvent::Deposited(amount) => self.balance + amount,
-      AccountEvent::Withdrawn(amount) => self.balance - amount,
-    };
+// Evolution function: Evolves the state based on the event
+fn apply(self, event: AccountEvent) -> Self {
+let new_balance = match event {
+AccountEvent::Deposited(amount) => self.balance + amount,
+AccountEvent::Withdrawn(amount) => self.balance - amount,
+};
 
     Account {
       balance: new_balance,
     }
-  }
+
 }
-```
+}
+
+````
 </Tab>
 <Tab>
 ```ts
@@ -90,7 +92,7 @@ type Account = {
 
 // Decision Function: Determines the appropriate event for an action
 const withdraw = (account: Account, amount: number): Result<AccountEvent[], string> => {
-  if (account.balance < amount) 
+  if (account.balance < amount)
     return Result.err('Insufficient funds');
   else
     return Result.ok([{ type: 'Withdrawn', amount }]);
@@ -107,6 +109,7 @@ const apply = (account: Account, event: AccountEvent): Account => {
     balance: newBalance,
   };
 };
-```
+````
+
 </Tab>
 </Tabs>

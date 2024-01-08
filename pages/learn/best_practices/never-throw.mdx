@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # Prefer Result Type over try-catch
 
@@ -31,13 +31,14 @@ Given the context, we prefer using the `Result` type over `try-catch` or `throws
 // In Rust, the Result type is commonly used for error handling.
 
 fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
-  if denominator == 0.0 {
-    Err("Cannot divide by zero".to_string())
-  } else {
-    Ok(numerator / denominator)
-  }
+if denominator == 0.0 {
+Err("Cannot divide by zero".to_string())
+} else {
+Ok(numerator / denominator)
 }
-```
+}
+
+````
 </Tab>
 
 <Tab>
@@ -61,6 +62,7 @@ function divide(numerator: number, denominator: number): Result<number, string> 
     return Result.ok(numerator / denominator);
   }
 }
-```
+````
+
 </Tab>
 </Tabs>

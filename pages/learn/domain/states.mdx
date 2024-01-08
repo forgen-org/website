@@ -1,4 +1,4 @@
-import { Tabs, Tab } from 'nextra/components'
+import { Tabs, Tab } from "nextra/components"
 
 # States
 
@@ -44,16 +44,17 @@ You can build a new state by applying a sequence of events to an initial state. 
 use framework::*;
 
 impl Events<BankAccount> for Vec<BankAccountEvent> {
-  fn apply(&self, &mut state: BankAccount) {
-    for event in self {
-      match event {
-        BankAccountEvent::Deposited(amount) => state.balance += amount,
-        BankAccountEvent::Withdrawn(amount) => state.balance -= amount,
-      }
-    }
-  }
+fn apply(&self, &mut state: BankAccount) {
+for event in self {
+match event {
+BankAccountEvent::Deposited(amount) => state.balance += amount,
+BankAccountEvent::Withdrawn(amount) => state.balance -= amount,
 }
-```
+}
+}
+}
+
+````
 </Tab>
 </Tabs>
 
@@ -85,6 +86,7 @@ impl Message<BankAccount> for BankAccountMessage {
     }
   }
 }
-```
+````
+
 </Tab>
 </Tabs>
