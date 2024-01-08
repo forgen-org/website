@@ -1,6 +1,6 @@
-import Image from 'next/image'
+import Image from "next/image"
 
-export default {
+const config = {
   // Main theme
   head: (
     <>
@@ -43,9 +43,11 @@ export default {
 
   // External links
   chat: {
-    link: 'https://discord.gg/6fTK3ssg',
+    link: "https://discord.gg/6fTK3ssg"
   },
   project: {
-    link: 'https://github.com/forgen-org'
-  },
+    link: "https://github.com/forgen-org"
+  }
 }
+
+export default config
