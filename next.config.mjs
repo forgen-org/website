@@ -11,7 +11,7 @@ const withNextra = nextra({
       () =>
         codeImport({
           removeRedundantIndentations: true,
-          rootDir: path.join(process.cwd(), "todo")
+          rootDir: path.join(__dirname, "todo")
         })
     ]
   }
