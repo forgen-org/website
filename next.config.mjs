@@ -1,5 +1,6 @@
 import nextra from "nextra"
 import codeImport from "remark-code-import"
+import path from "node:path"
 
 const withNextra = nextra({
   theme: "nextra-theme-docs",
@@ -10,7 +11,7 @@ const withNextra = nextra({
       () =>
         codeImport({
           removeRedundantIndentations: true,
-          rootDir: "todo"
+          rootDir: path.join(process.cwd(), "todo")
         })
     ]
   }
