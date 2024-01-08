@@ -1,0 +1,58 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Events
+
+```mermaid
+flowchart LR
+  State
+  Events[[Events]]
+  NewState[State]
+  Apply{apply}
+
+  State --> Apply
+  Events --> Apply
+  Apply --> NewState
+```
+
+In traditional state mutation for persistence, the system's state is directly updated and overwritten in the data store. This makes it challenging to reconstruct past states or understand the history and reasons behind state changes. In contrast, event sourcing persists the state of a business entity as a sequence of state-changing events. Each state change is stored as a separate event, allowing for a comprehensive history of state transformations, easy debugging, and complex business logic support. 
+
+- **Auditability**: Records every change, ensuring full traceability.
+- **Replayability**: Enables state reconstruction, aiding in debugging and analysis.
+- **Scalability**: Efficiently manages high loads through decoupling.
+- **Resilience**: Recovers state post-failure from the event log.
+- **Insightful Data**: Offers deep insights through historical analysis.
+- **Real-World Alignment**: Domain events mirror real-life business processes.
+
+## Creating Events
+
+Events should be the representation of real domain events. You should define them by talking to a domain expert or using techniques like [event storming](https://en.wikipedia.org/wiki/Event_storming). In our banking example, an event could be a deposit or a withdrawal. 
+
+<Tabs items={['Rust']}>
+<Tab>
+```rust filename="domain/bankaccount_event.ts"
+enum BankAccountEvent {
+  Deposited(Amount),
+  Withdrawn(Amount),
+}
+
+struct Amount(f64);
+```
+</Tab>
+</Tabs>
+
+## Serializing Events
+
+Because events will be stored in a database, they should be serializable. In Rust, you can use the `serde` crate to derive the `Serialize` and `Deserialize` traits.
+
+<Tabs items={['Rust']}>
+<Tab>
+```rust filename="domain/bankaccount_event.ts"
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+enum BankAccountEvent {
+  ...
+}
+```
+</Tab>
+</Tabs>

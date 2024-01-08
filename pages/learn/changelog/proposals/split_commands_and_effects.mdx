@@ -1,0 +1,22 @@
+import { Callout } from 'nextra/components'
+
+# Split Commands and effects
+
+## Problem
+
+For now, the side-effects are segregated into Commands which is good because this is exactly their purpose. The problem is that when we have a lot of commands, we might have repeating code. For example: computing projections, saving to the database, sending notifications etc. This leads to complex commands with a lot of dependencies. Another problem is that we might want to respond fast to the user and do the side-effects in a different thread which should be handled outside of the application layer.
+
+The proposal is to split the logic into two parts: Commands and Effects. The Commands are the same as before but at the end, they will push the events somewhere. The Effect catch these events and react to them, running the side-effects. 
+
+## EventBus
+
+```rs 
+trait EventBus {
+    fn publish(&self, event: Event);
+    fn subscribe(&self, event: Event, handler: Box<dyn Fn(Event)>);
+}
+```
+
+<Callout emoji="⚠️" type="warning">
+  The publish method is part of service `EventBus`. The `subscribe` method should maybe be part of a client since it is a reaction to some sort of input. This can lead to complex logic.
+</Callout>

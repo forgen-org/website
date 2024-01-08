@@ -1,0 +1,35 @@
+import { Tabs, Tab } from 'nextra/components'
+
+# Ports
+
+```mermaid 
+graph LR;
+  Service --Implements--> Port
+  Command --Uses--> Port 
+  Query --Uses--> Port 
+
+  style Service stroke-dasharray: 5 5
+```
+
+Ports are one of the key components that facilitate the separation of concerns, making systems more modular and adaptable.
+
+- **Interaction Points**: Serve as the primary points of interaction between the application's core logic and the outside world.
+- **Abstractions**: Define abstract interfaces for the core application to communicate with external elements like databases, user interfaces, and external services.
+
+## Implementing Ports
+
+Ports are implemented as interfaces or abstract classes, depending on the programming language used. 
+
+<Tabs items={['Rust']}>
+<Tab>
+```rust filename="application/ports.rs"
+use framework::*;
+pub use domain::{BankAccount, BankAccountEvent};
+
+pub trait BankAccountStore {
+    async fn get_account(&self, name: &str) -> AnyResult<BankAccount>;
+    async fn push_account(&self, name: &str, events: &[BankAccountEvent]) -> AnyResult<()>;
+}
+```
+</Tab>
+</Tabs>
