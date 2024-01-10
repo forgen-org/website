@@ -8,15 +8,28 @@ export default {
       pagination: false,
       sidebar: false,
       timestamp: false,
-      toc: false
-    }
+      toc: false,
+    },
   },
   studio: {
     title: "Studio",
-    type: "page"
+    type: "page",
   },
   learn: {
     title: "Learn",
-    type: "page"
-  }
+    type: "page",
+  },
+  blog: {
+    title: "Blog",
+    type: "page",
+    theme: {
+      layout: "full",
+      breadcrumb: false,
+      footer: false,
+      pagination: false,
+      sidebar: false,
+      timestamp: false,
+      toc: false,
+    },
+  },
 }

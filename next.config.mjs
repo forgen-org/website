@@ -11,10 +11,14 @@ const withNextra = nextra({
       () =>
         codeImport({
           removeRedundantIndentations: true,
-          rootDir: path.join(process.cwd(), "todo")
-        })
-    ]
-  }
+          rootDir: path.join(process.cwd(), "todo"),
+        }),
+    ],
+  },
 })
 
-export default withNextra()
+export default withNextra({
+  images: {
+    domains: ["avatars.githubusercontent.com"],
+  },
+})

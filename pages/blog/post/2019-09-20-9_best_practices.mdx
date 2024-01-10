@@ -1,0 +1,242 @@
+import { Cover } from "./Cover"
+
+<Cover />
+
+# 9 best practices I learned from React/Javascript
+
+9 best practices I learned from React/Node in 2019
+
+A huge part of writing good code is about making it practical, understandable, shareable. Who never dug into an old code stack and felt like “Was this written by a monkey?”.
+
+Spoiler alert, you were that monkey!
+
+I enjoy rationalizing software development. It makes it easier for anyone to understand a piece of code. Linters, naming conventions, file structures, tests… They are all good to take and you can find a ton of great articles about that concern.
+
+After having read a lot and tested different techniques, here is a personal list of the best practices you should have when coding with React/Node in 2019.
+
+## 1. Have a good naming convention
+
+This is probably the most discussed topic among software engineers. So, I won’t vent about it. There are a lot of amazing readings available everywhere (Medium, internet, books…) that are top-tiers.
+
+Here is a quick memento:
+
+- Use capitals for classes/components. Example: _MyComponent_
+
+- Use verbs for functions. Example: _doSomething_ or _handleClick_
+
+- Avoid underscores. Ok, this one might be a preference, but I feel capitalization as more readable. Plus it’s how native Javascript is written.
+
+- Avoid one letter variables. Yeah, that’s for you for(let i = 1; i < 100; i++)
+
+- Not too short, nor too long. Don’t write meaningless _update()_ nor _mightUpdateAndRefreshAllUsersEvery10min()_ functions.
+
+## 2. Do not use index.js
+
+Sounds weird, doesn’t it? You probably put code in _index.js_ files, let’s say in _MyComponent/index.js_ then importing using import MyComponent from ‘./MyComponent'. The main problem is that it’s a nonsense to use _index.js_ like that. Ryan Dahl, creator of Node, in a recent conference, mentioned _index.js_ being one of his biggest regrets. [https://www.youtube.com/watch?v=M3BM9TB-8yA](https://www.youtube.com/watch?v=M3BM9TB-8yA)
+
+Ryan Dahl explains that _index.js_ mimics the _index.html_ convention (since Node is a server version of a browser language). The problem is that you will end up having _index.js_ files everywhere! It will become painful to find your way in this labyrinth of _index.js_ files. Which *index.js *file has failed a unit-test, has been committed or is open in your editor? Worse: if you have other files in your component folder then which one is the entry point?
+
+So, only use index.js to directly export functions from other files, that’s all! Just don’t put any logic inside an index.js file. It’s gross.
+
+```ts
+todo
+```
+
+## 3. Have a module oriented file structure
+
+At first, you will be tempted to split files depending on their role. Let’s say one folder for components, one for schemas, one for reducers… This looks nice and you quickly find the file you seek. However, you will get lost when your codebase increases. Furthermore, you will end up having crazy imports in your files.
+
+```ts
+todo
+```
+
+This goes against React philosophy which is component-based. You created a crazy network of files, all needing each other, and whenever you move one; you must fix imports everywhere.
+
+When you create a component, think of it as something you could easily move to another project or remove from your current project without breaking everything up. This means, if you create a component that lists users, put children components, GraphQL queries, states, handlers, etc. in **one** directory.
+
+What about the UI components, tools or functions you might need? That’s fine, I feel you… You will put them at the root level!
+
+The rule is simple: don’t import a file from a parent level except if it is a direct child of your root directory.
+
+This is what your file structure should look like:
+
+```
+    /src
+      /components
+        /Button
+          Button.js
+          Button.test.js
+        Form.js
+      /scenes
+        /SignIn
+          SignIn.js
+          GET_USER_STATUS.graphql
+          /components
+            /LoginForm
+              LoginForm.js
+              LoginForm.test.js
+              schema.js
+              handlers.js
+      /services
+        apollo.js
+        router.js
+      index.js
+```
+
+In that example, _LoginForm.js_ is only allowed to import _schema.js_, *handler.js *locally\* _or_ _any file in _/services* or */components\*.
+
+Read more: [https://medium.com/@alexmngn/how-to-better-organize-your-react-applications-2fd3ea1920f1](https://medium.com/@alexmngn/how-to-better-organize-your-react-applications-2fd3ea1920f1)
+
+## 4. Use a resolver to your /src directory
+
+One weakness of my previous proposal is that you will end up using import Button from '../../../../Button/Button' in your _LoginForm.js_ file. Ouch. Pretty ugly, right?
+
+A solution is to configure webpack, eslint etc. to be able to do import Button from 'components/Button' just like if your components directory was an npm package (which it is exactly supposed to mimic).
+
+This is what my _webpack.config.js_ looks like:
+
+```js
+const path = require("path")
+
+module.exports = (config) => ({
+  ...config,
+  resolve: {
+    modules: [
+      path.resolve(__dirname, "node_modules"),
+      path.resolve(__dirname, "./src/"),
+    ],
+  },
+})
+```
+
+And my _.eslintrc.json _(using* eslint-import-resolver-webpack*):
+
+```json
+{
+  "extends": "airbnb",
+  "env": { "jest": true, "browser": true },
+  "settings": {
+    "import/resolver": "webpack"
+  }
+}
+```
+
+Voila!
+
+## 5. Use versioning, linters, unit tests and continuous integration
+
+This one is straightforward, but definitely use those tools.
+
+I use Atom and “Lint on save” option. It makes me happy when I see an ugly file with bad spacing, bad formatting, and potential errors being highlighted and sometimes automatically fixed when I save.
+
+Just a matter of preference, but I enjoy having my imports perfectly ordered, so here is an extract of my _.eslintrc.json_ file:
+
+```json
+{
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          ["external", "internal"],
+          "parent",
+          ["sibling", "index"]
+        ]
+      }
+    ]
+  }
+}
+```
+
+I like to use Jest and CircleCI for tests and automated deployment. The main idea is: don’t lose time fixing things and deploying stuff! This is something I experienced many times in the past. You code for days, and then you are finally ready to publish your code! You feel excitement and you try to hold yourself not to run everywhere and show everyone what you just created. But… Oops! Some errors in the console, some crashes afterward, some naughty bugs as soon as you try to use your website online. Excitement has been replaced by frustration.
+
+The first thing you should do before writing any code is making sure you can test and deploy a very basic “hello world” app. Then, make it automatic. Each time you push a feature, it should either be immediately available in some online environment or you should be notified that something broke.
+
+I recommend you to read some stuff about Test Driven Development (TDD): [https://medium.com/hackernoon/introduction-to-test-driven-development-tdd-61a13bc92d92](https://medium.com/hackernoon/introduction-to-test-driven-development-tdd-61a13bc92d92)
+
+Also, a mention to the husky package which allows you to automatically run your linter or tests before a commit via Git Hooks. [https://www.npmjs.com/package/husky](https://www.npmjs.com/package/husky)
+
+## 6. Don’t make the perfect component
+
+You are a good student, right? So when you learned about React philosophy, you also learned that a component should be reusable. Now you are looking at my previous examples, and you are probably thinking “Shouldn’t I put _LoginForm_ in the _/components_ directory since I might reuse it somewhere else?”.
+
+Guess what? You are right!
+
+Maybe at some point you will need to reuse this component, which is fine because that’s why people love React. However, an ugly mistake I often did at the beginning was developing a component by imagining all its future possibilities and try to make it universal from design. This is wrong.
+
+You need _LoginForm_ in your _SignIn_ scene. That’s all for now! Your components should be straightforward and doing as little as possible at first. You will discover other use cases after. I would even say, your main _Button_ component should be encapsulated in a scene at first because you might need it only once after all!
+
+This rule is hard to follow because you are always tempted to overthink the next development and prepare the future. But I have learned that it is often wrong, and it is faster to refactor some old straightforward component than anticipating everything from scratch.
+
+## 7. Avoid npm libraries and use ES6
+
+I remember with a bit of nostalgia jQuery first release. It was the golden age of frontend developers. No more crazy document.getElementById("login-button").onClick(fn) things. Just human-readable and CSS-like selectors that made everything easier! Guess what? Nobody wants to use jQuery anymore. It became heavy and outdated, a relic that every Javascript developer regards with a mix of nostalgia and disgust.
+
+This is probably the fate reserved for your code. And actually for anyone’s code. Even the one that comes from this hegemonic npm module you are using.
+
+Every time you use an npm module, you create a dependence on it; you add complexity for anyone that might read your code; you open a breach for security issues; you probably add some needless functions to your codebase.
+
+I am not saying you shouldn’t use npm modules. They are great! But try to avoid them whenever it’s possible.
+
+A simple example is the underscore/lodash library. You know, that one that let you do awesome things like doing a forEach over an object? I have discovered that even if it takes some time and might look stupid, it is often better to hard code things.
+
+```ts
+todo
+```
+
+90% of the time, you can find ways of doing it yourself by using native Javascript. ES6 is awesome and you can do a lot of things! Array.reduce, spreading objects, Promise…
+
+More readings: https://dev.to/saurabhdaware/how-i-brought-down-my-project-s-dependency-tree-from-36-packages-to-4-packages-1n0h
+
+## 8. Avoid imports
+
+This one is even more hardcore than the previous one. Of course you have to use imports! Might be some local files or some libraries. But remember that anytime you import something, you are just adding complexity. You are making your function harder to test, more dependent, less reliable, less comprehensible.
+
+A very simple example could be a set of Mongo collection methods. You could be tempted to write such a function to update a username:
+
+```ts
+todo
+```
+
+This is kind of wrong because you need to import a ton of things before writing meaningful code. You are adding a lot of interdependence between files, and you might pay that badly in the future.
+
+I would recommend having one main function or class that holds all the logic for you. Write a straightforward function such as:
+
+```ts
+todo
+```
+
+… and having all the logic in _this_. Thus, your function is readable, simple, and testable. Thank me later.
+
+Here is a full example to understand better:
+
+```ts
+todo
+```
+
+## 9. Write sharp functional components
+
+There were some trends in the React sphere. At first people were into classes, then it felts a bit verbose so they changed their mind for stateless functions with some HOC (Higher Order Components), and now functional components became a thing thanks to the new hooks such as _useState_ introduced in React 16.8.
+
+I have tested all those trends and let me remind you something: everything is a function in Javascript! Use functional components.
+
+I honestly love that new trend. I hated having to rewrite some stateless component to add some state or having to chain HOC that needed me to change my props type checking. The new syntax makes it smoother and more rational. Props are what parents can play with. State is an internal reactive value that can be added and removed from your code at any time. No more HOC.
+
+Here is an example derived from the awesome Material UI library ([https://material-ui.com/](https://material-ui.com/)):
+
+```ts
+todo
+```
+
+Isn’t that beautiful?
+
+## Conclusion
+
+Those best practices might look like “yet another megalomaniac set of rules” that are supposedly better than the others. It is in some ways! Eventually, this is just a guideline born of personal experience. Some people love using as many npm modules as they desire. Some people like index.js files. Some people enjoy writing components as classes. Etc.
+
+Just take what you want from this article. Don’t forget that the main aim is just to earn time. Not necessarily today because adding unit tests, changing your file structure or rewriting old code is a loss of time at the moment.
+
+But in the long run, those best practices made me more productive, helped me writing shareable code, prevented me from repeating the same mistakes and experiencing the same bugs over and over.
+
+Let me know what you think, what best practices you would add or if you have any suggestions in the comment section!

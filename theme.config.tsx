@@ -46,19 +46,19 @@ const config: DocsThemeConfig = {
     </div>
   ),
   sidebar: {
-    defaultMenuCollapseLevel: 1
+    defaultMenuCollapseLevel: 1,
   },
   footer: {
-    component: null
+    component: null,
   },
 
   // External links
   chat: {
-    link: "https://discord.gg/6fTK3ssg"
+    link: "https://discord.gg/6fTK3ssg",
   },
   project: {
-    link: "https://github.com/forgen-org"
-  }
+    link: "https://github.com/forgen-org",
+  },
 }
 
 export default config
