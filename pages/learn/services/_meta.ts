@@ -1,3 +1,3 @@
 export default {
-  features: "Features"
+  features: "Features",
 }

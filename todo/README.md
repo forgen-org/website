@@ -11,8 +11,8 @@ The project is divided into several parts:
 2. `framework`: This is a set of common utilities and traits used across the application.
 
 3. [`clients`](command:_github.copilot.openRelativePath?%5B%22clients%22%5D "clients"): This directory contains two client implementations of the application:
-    - `axum`: This is a server-side implementation using the Axum web framework. The server exposes several endpoints for interacting with the todo list. The main entry point is [`main.rs`](command:_github.copilot.openSymbolInFile?%5B%22clients%2Faxum%2Fsrc%2Fmain.rs%22%2C%22main.rs%22%5D "clients/axum/src/main.rs").
-    - `yew`: This is a client-side implementation using the Yew framework for building web applications with Rust and WebAssembly. The main entry point is [`main.rs`](command:_github.copilot.openSymbolInFile?%5B%22clients%2Fyew%2Fsrc%2Fmain.rs%22%2C%22main.rs%22%5D "clients/yew/src/main.rs").
+   - `axum`: This is a server-side implementation using the Axum web framework. The server exposes several endpoints for interacting with the todo list. The main entry point is [`main.rs`](command:_github.copilot.openSymbolInFile?%5B%22clients%2Faxum%2Fsrc%2Fmain.rs%22%2C%22main.rs%22%5D "clients/axum/src/main.rs").
+   - `yew`: This is a client-side implementation using the Yew framework for building web applications with Rust and WebAssembly. The main entry point is [`main.rs`](command:_github.copilot.openSymbolInFile?%5B%22clients%2Fyew%2Fsrc%2Fmain.rs%22%2C%22main.rs%22%5D "clients/yew/src/main.rs").
 
 ## Getting Started
 

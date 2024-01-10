@@ -10,7 +10,7 @@
     "react/no-unescaped-entities": "off"
   },
   "settings": {
-    "mdx/code-blocks": true,
+    "mdx/code-blocks": false,
     "mdx/language-mapper": {}
   }
 }
