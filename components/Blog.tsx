@@ -19,21 +19,22 @@ export type Author = {
 
 export type ItemArticle = Item & Article
 
-export const Posts = () => {
+export const List = () => {
   const config = useConfig()
-  const items = config.normalizePagesResult.activePath[0].children[1]
-    .children as ItemArticle[]
+  const items =
+    (config.normalizePagesResult.activePath.at(0)?.children?.at(1)
+      ?.children as ItemArticle[]) ?? []
 
   return (
     <div className="grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
       {items.map((item) => (
-        <Post key={item.route} {...item} />
+        <Card key={item.route} {...item} />
       ))}
     </div>
   )
 }
 
-const Post = (props: ItemArticle) => (
+const Card = (props: ItemArticle) => (
   <article className="rounded-lg border border-gray-200 bg-white p-6 shadow-md dark:border-gray-700 dark:bg-gray-800">
     <div className="relative my-2 h-56 rounded-lg bg-gray-100 shadow-xl dark:bg-gray-700 dark:bg-gray-800">
       <Link href={props.route}>
@@ -41,7 +42,7 @@ const Post = (props: ItemArticle) => (
           alt={props.title}
           className="rounded-lg object-cover"
           fill
-          priority={false}
+          priority
           sizes="100vw"
           src={props.cover}
         />
@@ -95,5 +96,71 @@ const Post = (props: ItemArticle) => (
   </article>
 )
 
+export const Cover = () => {
+  const config = useConfig()
+  const current = config.normalizePagesResult.activePath.at(-1) as ItemArticle
+
+  return (
+    <div className="my-6 flex justify-center">
+      <div className="relative w-3/4">
+        <Image
+          alt={current.title}
+          className="rounded-lg object-scale-down shadow-xl dark:bg-gray-700 dark:bg-gray-800"
+          height={0}
+          priority
+          sizes="100vw"
+          src={current.cover}
+          style={{ width: "100%", height: "auto" }}
+          width={0}
+        />
+      </div>
+    </div>
+  )
+}
+
+export const Details = () => {
+  const config = useConfig()
+  const current = config.normalizePagesResult.activePath.at(-1) as ItemArticle
+
+  return (
+    <header className="not-format mb-4 lg:mb-6">
+      <address className="mb-6 flex items-center not-italic">
+        <div className="mr-3 inline-flex items-center text-sm text-gray-900 dark:text-white">
+          <Image
+            alt={current.author.name}
+            className="mr-4 h-10 w-10 rounded-full"
+            height={40}
+            src={current.author.avatar}
+            width={40}
+          />
+          <div>
+            <Link
+              href={current.author.github}
+              rel="author"
+              className="text-xl font-bold text-gray-900 dark:text-white"
+            >
+              {current.author.name}
+            </Link>
+            <p className="text-base text-gray-500 dark:text-gray-400">
+              <time
+                dateTime={current.date.toString()}
+                title={formatDate(current.date)}
+              >
+                {formatDate(current.date)}
+              </time>
+            </p>
+          </div>
+        </div>
+      </address>
+    </header>
+  )
+}
+
 const formatDate = (from: Date) =>
   new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(from)
+
+export const Blog = {
+  Cover,
+  Details,
+  List,
+}

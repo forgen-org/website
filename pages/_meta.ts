@@ -4,7 +4,7 @@ export default {
     type: "page",
     theme: {
       breadcrumb: false,
-      footer: false,
+      layout: "full",
       pagination: false,
       sidebar: false,
       timestamp: false,
@@ -25,7 +25,6 @@ export default {
     theme: {
       layout: "full",
       breadcrumb: false,
-      footer: false,
       pagination: false,
       sidebar: false,
       timestamp: false,
