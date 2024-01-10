@@ -1,12 +1,10 @@
 import Image from "next/image"
 import { useConfig } from "nextra-theme-docs"
-import { Item } from "nextra/normalize-pages"
-import { Article } from "./_meta"
+import { ItemArticle } from "./Posts"
 
 export const Cover = () => {
   const config = useConfig()
-  const current = config.normalizePagesResult.activePath.at(-1) as Item &
-    Article
+  const current = config.normalizePagesResult.activePath.at(-1) as ItemArticle
 
   return (
     <div className="my-6 flex  justify-center">

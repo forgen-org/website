@@ -2,9 +2,22 @@ import Image from "next/image"
 import Link from "next/link"
 import { useConfig } from "nextra-theme-docs"
 import { Item } from "nextra/normalize-pages"
-import { Article } from "./post/_meta"
 
-type ItemArticle = Item & Article
+export type Article = {
+  abstract: string
+  author: Author
+  cover: string
+  date: Date
+  title: string
+}
+
+export type Author = {
+  name: string
+  avatar: string
+  github: string
+}
+
+export type ItemArticle = Item & Article
 
 export const Posts = () => {
   const config = useConfig()

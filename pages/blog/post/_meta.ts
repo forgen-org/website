@@ -1,18 +1,5 @@
-export type Article = {
-  abstract: string
-  author: Author
-  cover: string
-  date: Date
-  title: string
-}
+import type { Article, Author } from "components/Posts"
 
-type Author = {
-  name: string
-  avatar: string
-  github: string
-}
-
-// eslint-disable-next-line no-redeclare
 const Author: Record<string, Author> = {
   Alexandre: {
     name: "Alexandre Hanot",
