@@ -5,9 +5,9 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <script
-          async
-          src="http://umami-lgc4kww.51.91.215.100.sslip.io/script.js"
-          data-website-id="48cfce0b-f7b4-406a-a330-0bd586eb0dc8"
+          defer
+          data-domain="forgen.tech"
+          src="https://analytics.forgen.tech/js/script.js"
         ></script>
       </Head>
       <body>
