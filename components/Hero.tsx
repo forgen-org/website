@@ -71,8 +71,8 @@ export const Hero = (props: HeroProps) => {
           </h1>
           <p
             className={clsx(
-              "mb-6 max-w-2xl font-light text-gray-500 md:text-lg lg:mb-8 lg:text-xl dark:text-gray-400",
-              align === "top" && "lg:text-3xl",
+              "mb-6 max-w-2xl font-light text-gray-500 md:text-lg lg:mb-8 dark:text-gray-400",
+              align === "top" ? "lg:text-3xl" : "lg:text-xl",
             )}
           >
             {props.subheading}
@@ -111,8 +111,8 @@ export const Hero = (props: HeroProps) => {
 const parseProps = (find: () => ChildrenFind): HeroProps => {
   const heading =
     find().whereName("h1").value() ??
-    find().whereName("h2").value() ??
-    find().whereName("Heading").value()
+    find().whereName("").value() ?? // In build, the name is empty ## Heading
+    find().whereName("Heading").value() // In dev, the name is Heading for ## Heading
   const subheading = find().whereName("p").whereChildrenIsString().value()
   const img = find().whereName("img").props<{
     src: StaticImport
