@@ -110,7 +110,9 @@ export const Hero = (props: HeroProps) => {
 
 const parseProps = (find: () => ChildrenFind): HeroProps => {
   const heading =
-    find().whereName("h1").value() ?? find().whereName("Heading").value()
+    find().whereName("h1").value() ??
+    find().whereName("h2").value() ??
+    find().whereName("Heading").value()
   const subheading = find().whereName("p").whereChildrenIsString().value()
   const img = find().whereName("img").props<{
     src: StaticImport
