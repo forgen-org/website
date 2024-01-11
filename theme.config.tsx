@@ -3,6 +3,11 @@ import { useConfig, DocsThemeConfig } from "nextra-theme-docs"
 import { Footer } from "./components"
 
 const config: DocsThemeConfig = {
+  feedback: {
+    useLink: () => "https://discord.gg/6fTK3ssg",
+  },
+  editLink: { component: () => null },
+
   // Main theme
   head: function useHead() {
     const config = useConfig()

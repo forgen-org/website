@@ -11,9 +11,20 @@ export default {
       toc: false,
     },
   },
-  studio: {
-    title: "Studio",
+  // studio: {
+  //   title: "Studio",
+  //   type: "page",
+  // },
+  manifesto: {
+    title: "Manifesto",
     type: "page",
+    theme: {
+      breadcrumb: false,
+      pagination: false,
+      sidebar: false,
+      timestamp: false,
+      toc: false,
+    },
   },
   learn: {
     title: "Learn",
