@@ -35,10 +35,10 @@ export const Hero = (props: HeroProps) => {
           src={props.img.src}
           alt={props.img.alt}
           className={clsx(
-            "max-h-60 w-full",
+            "w-full",
             props.rawImg
-              ? "object-contain"
-              : "rounded-lg object-cover shadow-xl dark:bg-gray-700 dark:bg-gray-800",
+              ? "max-h-60 object-contain"
+              : "max-h-72 rounded-lg object-cover shadow-xl dark:bg-gray-700 dark:bg-gray-800",
           )}
           priority
         />
