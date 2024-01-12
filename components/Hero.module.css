@@ -1,0 +1,30 @@
+.hero {
+  @apply mx-auto grid max-w-screen-xl items-center p-8 lg:grid-cols-12 lg:gap-16 lg:py-16;
+}
+
+.primary {
+  @apply col-span-7;
+}
+
+.primary h1,
+.primary h2,
+.primary h3,
+.primary h4 {
+  @apply mb-4 border-0 text-3xl font-extrabold leading-none tracking-tight md:text-4xl xl:text-5xl dark:text-white;
+}
+
+.primary p {
+  @apply mb-6 font-light text-gray-500 md:text-lg lg:mb-8 lg:text-xl dark:text-gray-400;
+}
+
+.primary p a {
+  @apply mr-3 inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 text-center text-base font-medium text-white no-underline hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900;
+}
+
+.secondary {
+  @apply col-span-5 hidden text-center lg:block;
+}
+
+.secondary img {
+  @apply inline-block max-h-80 w-auto rounded-lg object-contain shadow-xl dark:bg-gray-700 dark:bg-gray-800;
+}

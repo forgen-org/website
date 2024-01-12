@@ -1,9 +1,9 @@
-import { Animation, Hero } from "components"
+import { Animation, Jumbotron, Hero, Highlight } from "components"
 
 <Animation />
 
 <div className="my-18">
-<Hero rawImg top>
+<Jumbotron>
 
 ![Logo](/logo.png)
 
@@ -11,65 +11,85 @@ import { Animation, Hero } from "components"
 
 Crafting Multi-Platform Solutions.
 
-</Hero>
+</Jumbotron>
 </div>
 
-<Hero right>
-
-![Multi-Platform Solution](/home/multi-platform.webp)
-
+<Hero>
+<Hero.Primary>
 ## Multi-Platform Solution
 
-Our Rust core, augmented with bindings to JavaScript through WebAssembly, Swift, and Kotlin, enables a 'code once, deploy everywhere' philosophy. Experience unparalleled performance across all platforms.
+Our Rust core, augmented with bindings to JavaScript, Swift, and Kotlin, enables a <Highlight>code once, deploy everywhere</Highlight> philosophy. Experience unparalleled performance across all platforms.
 
 [Ask for a Quote](mailto:hello@forgen.tech)
 
+</Hero.Primary>
+<Hero.Secondary>
+![Multi-Platform Solution](/home/multiplatform.png)
+</Hero.Secondary>
 </Hero>
 
 <Hero>
+<Hero.Secondary>
+![Cutting-Edge Technology](/home/wasm-langs.png)
 
-![Cutting-Edge Technology](/home/technology.png)
+```mermaid
+graph TD;
+    Rust((Rust Core))
+    Rust <-->|WASM| TypeScript(TypeScript)
+    Rust <-->|WASM| NodeJS(NodeJS)
+    Rust <-->|FFI| Swift(Swift)
+    Rust <-->|FFI| Kotlin(Kotlin)
+```
 
+</Hero.Secondary>
+<Hero.Primary>
 ## Cutting-Edge Technology
 
 Leveraging the latest advancements in Rust, WebAssembly, and TypeScript, we offer unmatched performance and stability. Our commitment to modern technologies ensures scalability and a bug-free experience for your projects.
 
 [Our GitHub](https://github.com/forgen-org)
 
+</Hero.Primary>
 </Hero>
 
 <Hero right>
-
-![Craftsmanship and Quality](/home/coder.png)
-
+<Hero.Primary>
 ## Craftsmanship and Quality
 
 Our passion for excellence drives us. Composed solely of senior developers, Forgen is synonymous with craftsmanship. We deliver the highest quality software, meticulously engineered to meet your exact needs.
 
 [Our Architecture](/learn)
 
+</Hero.Primary>
+<Hero.Secondary>
+![Craftsmanship and Quality](/home/bugfree.png)
+</Hero.Secondary>
 </Hero>
 
 <Hero>
-
+<Hero.Secondary>
 ![Our Manifesto](/home/manifesto.png)
-
+</Hero.Secondary>
+<Hero.Primary>
 ## Our Manifesto
 
 We adhere to a strict set of moral values. Honesty, transparency, and a commitment to quality define us. We reserve the right to choose projects that align with our manifesto, ensuring our work reflects our high ethical standards.
 
 [Read more](/manifesto)
 
+</Hero.Primary>
 </Hero>
 
 <Hero right>
-
-![Community and Openness](/home/community.png)
-
+<Hero.Primary>
 ## Community and Openness
 
 Forgen is more than a company; we are a community. Our commitment to openness and sharing knowledge is unwavering. From open-source contributions to engaging discussions on our Discord channel and insightful blog articles, we believe in the strength of transparency.
 
 [Join us on Discord](https://discord.gg/6fTK3ssg)
 
+</Hero.Primary>
+<Hero.Secondary>
+![Community and Openness](/home/discord.png)
+</Hero.Secondary>
 </Hero>

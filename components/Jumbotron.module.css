@@ -1,0 +1,15 @@
+.jumbotron {
+  @apply m-12 flex flex-col items-center;
+}
+
+.jumbotron img {
+  @apply inline-block max-h-60 object-contain;
+}
+
+.jumbotron h1 {
+  @apply mt-4 max-w-2xl text-6xl font-extrabold leading-none tracking-tight dark:text-white;
+}
+
+.jumbotron p {
+  @apply max-w-2xl font-light text-gray-500 md:text-lg lg:mb-8 lg:text-3xl dark:text-gray-400;
+}
