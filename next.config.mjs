@@ -18,7 +18,18 @@ const withNextra = nextra({
 })
 
 export default withNextra({
+  i18n: {
+    locales: ["en", "fr"],
+    defaultLocale: "en",
+  },
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
+  redirects: () => [
+    {
+      source: "/",
+      destination: "/en",
+      permanent: true,
+    },
+  ],
 })

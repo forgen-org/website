@@ -3,7 +3,7 @@
 }
 
 .jumbotron img {
-  @apply inline-block max-h-60 object-contain;
+  @apply inline-block max-h-60 w-auto object-contain;
 }
 
 .jumbotron h1 {

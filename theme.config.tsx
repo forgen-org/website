@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { useConfig, DocsThemeConfig } from "nextra-theme-docs"
 import { Footer } from "./components"
+import { useRouter } from "nextra/hooks"
 
 const config: DocsThemeConfig = {
   feedback: {
@@ -13,7 +14,8 @@ const config: DocsThemeConfig = {
     const config = useConfig()
 
     const title =
-      config.filePath !== "pages/index.mdx"
+      config.filePath !== "pages/en/index.mdx" &&
+      config.filePath !== "pages/fr/index.mdx"
         ? `${config.title} - Forgen`
         : "Forgen"
 
@@ -46,19 +48,43 @@ const config: DocsThemeConfig = {
       </>
     )
   },
+  i18n: [
+    {
+      locale: "en",
+      name: "English",
+    },
+    {
+      locale: "fr",
+      name: "Français",
+    },
+  ],
   logo: (
     <div className="w-24">
       <Image src="/logo.png" height={24} width={24} alt="Forgen" />
     </div>
   ),
   search: {
-    placeholder: "Search Forgen...",
+    placeholder: function Placeholder() {
+      const { locale } = useRouter()
+      switch (locale) {
+        case "fr":
+          return "Rechercher Forgen..."
+        default:
+          return "Search Forgen..."
+      }
+    },
   },
   sidebar: {
     defaultMenuCollapseLevel: 1,
   },
   footer: {
     component: <Footer />,
+  },
+
+  notFound: {
+    content: function NotFound() {
+      return "Hello"
+    },
   },
 
   // External links
