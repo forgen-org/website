@@ -1,16 +1,6 @@
-// import { useRouter } from "nextra/hooks"
 import Link from "next/link"
 
 export default function NotFound() {
-  // TODO: I'm trying to redirect to the english version of the 404 page if the user is on the french version of the website.
-  // const router = useRouter()
-
-  // if (router.locale !== "en") {
-  //   const path = "/en" + router.asPath.substring(3)
-  //   const component = require(path).default
-  //   router.replace(path)
-  // }
-
   return (
     <section className="flex min-h-screen items-center bg-white dark:bg-gray-900">
       <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">

@@ -4,7 +4,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext mdx,md,js,jsx,ts,tsx",
-    "clean": "rm -rf .next node_modules/.cache"
+    "clean": "rm -rf .next node_modules/.cache",
+    "localize": "npx tsx ./localize.ts"
   },
   "packageManager": "pnpm@8.14.0",
   "dependencies": {
