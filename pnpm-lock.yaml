@@ -28,6 +28,9 @@ dependencies:
     version: 18.2.0(react@18.2.0)
 
 devDependencies:
+  '@forgen/remark-remote-code':
+    specifier: ^1.0.0
+    version: 1.0.0
   '@types/react':
     specifier: ^18.2.47
     version: 18.2.47
@@ -157,6 +160,15 @@ packages:
   /@eslint/js@8.56.0:
     resolution: {integrity: sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: true
+
+  /@forgen/remark-remote-code@1.0.0:
+    resolution: {integrity: sha512-TrHivXumuLFCjSapsDtzFmR1wYxTgOm6x8btFwIgpbidnA5/yohKKi9W22xF73l2pB4kNYoYBMYccfOV5ZzB1A==}
+    engines: {node: '>= 12'}
+    dependencies:
+      strip-indent: 4.0.0
+      to-gatsby-remark-plugin: 0.1.0
+      unist-util-visit: 4.1.2
     dev: true
 
   /@headlessui/react@1.7.18(react-dom@18.2.0)(react@18.2.0):
