@@ -25,11 +25,4 @@ export default withNextra({
   images: {
     domains: ["avatars.githubusercontent.com"],
   },
-  redirects: () => [
-    {
-      source: "/",
-      destination: "/en",
-      permanent: true,
-    },
-  ],
 })
