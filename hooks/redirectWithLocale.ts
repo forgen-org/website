@@ -1,4 +1,3 @@
-// export { default as default } from "./en/index.mdx"
 import { GetServerSidePropsContext } from "next"
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -19,8 +18,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
 
   return { props: {} }
-}
-
-export default function Index() {
-  return null
 }
