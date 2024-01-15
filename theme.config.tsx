@@ -2,6 +2,7 @@ import Image from "next/image"
 import { useConfig, DocsThemeConfig } from "nextra-theme-docs"
 import { Footer } from "./components"
 import { useRouter } from "nextra/hooks"
+import Link from "next/link"
 
 const config: DocsThemeConfig = {
   feedback: {
@@ -58,11 +59,18 @@ const config: DocsThemeConfig = {
       name: "Français",
     },
   ],
-  logo: (
-    <div className="w-24">
-      <Image src="/logo.png" height={24} width={24} alt="Forgen" />
-    </div>
-  ),
+  logo: function Logo() {
+    const { locale } = useRouter()
+
+    return (
+      <div className="w-24">
+        <Link href={`/${locale}`}>
+          <Image src="/logo.png" height={24} width={24} alt="Forgen" />
+        </Link>
+      </div>
+    )
+  },
+  logoLink: false,
   search: {
     placeholder: function Placeholder() {
       const { locale } = useRouter()
