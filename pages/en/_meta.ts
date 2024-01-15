@@ -11,10 +11,10 @@ export default {
       toc: false,
     },
   },
-  // studio: {
-  //   title: "Studio",
-  //   type: "page",
-  // },
+  studio: {
+    title: "Studio",
+    type: "page",
+  },
   manifesto: {
     title: "Manifesto",
     type: "page",
