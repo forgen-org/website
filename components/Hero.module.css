@@ -10,15 +10,30 @@
 .primary h2,
 .primary h3,
 .primary h4 {
-  @apply mb-4 border-0 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl xl:text-5xl dark:text-white;
+  @apply mb-4 border-0 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl xl:text-5xl;
+}
+
+:global(.dark) .primary h1,
+.primary h2,
+.primary h3,
+.primary h4 {
+  @apply text-white;
 }
 
 .primary p {
-  @apply mb-6 font-light text-gray-500 md:text-lg lg:mb-8 lg:text-xl dark:text-gray-400;
+  @apply mb-6 font-light text-gray-500 md:text-lg lg:mb-8 lg:text-xl;
+}
+
+:global(.dark) .primary p {
+  @apply text-gray-400;
 }
 
 .primary p a {
-  @apply mr-3 inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 text-center text-base font-medium text-white no-underline hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900;
+  @apply mr-3 inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 text-center text-base font-medium text-white no-underline hover:bg-blue-800 focus:ring-4 focus:ring-blue-300;
+}
+
+:global(.dark) .primary p a {
+  @apply focus:ring-blue-900;
 }
 
 .secondary {
@@ -26,5 +41,9 @@
 }
 
 .secondary img {
-  @apply inline-block max-h-80 w-auto rounded-lg object-contain shadow-xl dark:bg-gray-700 dark:bg-gray-800;
+  @apply inline-block max-h-80 w-auto rounded-lg object-contain shadow-xl;
+}
+
+:global(.dark) .secondary img {
+  @apply bg-gray-800;
 }
