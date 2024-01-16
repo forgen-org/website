@@ -18,7 +18,7 @@
   }
 }
 
-:is(html[class~=dark] body) {
+:is(html[class~="dark"] body) {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -28,20 +28,24 @@
     rgb(var(--background-start-rgb));
 }
 
-:is(html[class~=dark] .nextra-nav-container-blur) {
-  background: var(--background-start-rgb)!important;
+:is(html[class~="dark"] .nextra-nav-container-blur) {
+  background: var(--background-start-rgb) !important;
 }
 
-:is(html[class~=dark] .dark\:_bg-dark) {
-  background: transparent!important;
-  box-shadow: none!important;
+:is(html[class~="dark"] .dark\:_bg-dark) {
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-:is(html[class~=dark] .dark\:_border-neutral-800) {
-  border-color: rgba(255, 255, 255, 0.1)!important;
+:is(html[class~="dark"] .dark\:_border-neutral-800) {
+  border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
 /* Overriding default Mermaid color scheme  */
-svg .node rect, svg .node circle, svg .node ellipse, svg .node polygon, svg .node path {
-  fill: #030718!important;
+svg .node rect,
+svg .node circle,
+svg .node ellipse,
+svg .node polygon,
+svg .node path {
+  @apply dark:!fill-blue-900;
 }
