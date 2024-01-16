@@ -47,5 +47,5 @@ svg .node circle,
 svg .node ellipse,
 svg .node polygon,
 svg .node path {
-  @apply dark:!fill-blue-900;
+  @apply dark:fill-blue-900 !important;
 }
