@@ -69,7 +69,7 @@ const Card = (props: ItemArticle) => (
             src={props.author.avatar}
             width={28}
           />
-          <span className="font-medium dark:text-white">
+          <span className="font-medium text-gray-900 dark:text-white">
             {props.author.name}
           </span>
         </div>

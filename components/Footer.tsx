@@ -7,7 +7,7 @@ export const Footer = () => (
         <div className="mb-6 md:mb-0">
           <a href="https://forgen.tech" className="flex items-center">
             <Image src="/logo.png" height={24} width={24} alt="Forgen" />
-            <span className="ml-3 self-center whitespace-nowrap text-xl font-extrabold dark:text-white">
+            <span className="ml-3 self-center whitespace-nowrap text-xl font-extrabold text-gray-900 dark:text-white">
               Forgen
             </span>
           </a>

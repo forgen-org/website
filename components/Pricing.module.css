@@ -32,7 +32,7 @@
 }
 
 .plan li strong {
-  @apply block text-black sm:text-lg dark:text-white;
+  @apply block text-gray-900 sm:text-lg dark:text-white;
 }
 
 .plan a {
