@@ -14,6 +14,14 @@ const Author: Record<string, Author> = {
 }
 
 export const articles: Record<string, Article> = {
+  "remark-remote-code": {
+    abstract:
+      "Enhance your Markdown files by dynamically importing code blocks from remote sources.",
+    author: Author.Alexandre,
+    cover: "/blog/remark-remote-code/cover.png",
+    date: new Date("2024-01-22"),
+    title: "@forgen/remark-remote-code",
+  },
   "building-an-android-app-with-rust-using-uniffi": {
     abstract:
       "A comprehensive guide on integrating Rust code into an Adroid application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.",
