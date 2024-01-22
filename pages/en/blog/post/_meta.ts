@@ -14,6 +14,14 @@ const Author: Record<string, Author> = {
 }
 
 export const articles: Record<string, Article> = {
+  "building-an-android-app-with-rust-using-uniffi": {
+    abstract:
+      "A comprehensive guide on integrating Rust code into an Adroid application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.",
+    author: Author.Alexandre,
+    cover: "/blog/building-an-android-app-with-rust-using-uniffi/cover.png",
+    date: new Date("2024-01-22"),
+    title: "Building an Android App with Rust Using UniFFI",
+  },
   "building-an-ios-app-with-rust-using-uniffi": {
     abstract:
       "A comprehensive guide on integrating Rust code into an iOS application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.",
