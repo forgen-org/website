@@ -6,16 +6,21 @@ const Author: Record<string, Author> = {
     avatar: "https://avatars.githubusercontent.com/u/222164?v=4",
     github: "https://github.com/Almaju",
   },
+  Alexis: {
+    name: "Alexis Besson",
+    avatar: "https://avatars.githubusercontent.com/u/20556405?v=4",
+    github: "https://github.com/Lab3ss",
+  },
 }
 
 export const articles: Record<string, Article> = {
-  "2019-09-20-9_best_practices": {
+  "building-an-ios-app-with-rust-using-uniffi": {
     abstract:
-      "A huge part of writing good code is about making it practical, understandable, shareable. Who never dug into an old code stack and felt like “Was this written by a monkey?”. Spoiler alert, you were that...",
+      "A comprehensive guide on integrating Rust code into an iOS application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.",
     author: Author.Alexandre,
-    cover: "/blog/2019-09-20-9_best_practices/cover.webp",
-    date: new Date("2019-09-20"),
-    title: "9 best practices I learned from React/Node in 2019",
+    cover: "/blog/building-an-ios-app-with-rust-using-uniffi/cover.png",
+    date: new Date("2024-01-22"),
+    title: "Building an iOS App with Rust Using UniFFI",
   },
 }
 
