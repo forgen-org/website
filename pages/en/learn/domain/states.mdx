@@ -4,12 +4,27 @@ import { Tabs } from "nextra/components"
 
 ```mermaid
 graph LR
-  default --> State
-  default{default}
+  Message
+  State
+  Events[[Events]]
+  NewState[State]
+  Apply{apply}
+  Send{send}
+  Default{default}
+  Error
+
+  Default --> State
+  Message --> Send
+  State --> Send
+  Send --Ok--> Events
+  Send --Err--> Error
+  State --> Apply
+  Events --> Apply
+  Apply --> NewState
 
 ```
 
-A **State** is a representation of a domain-specific object at a certain time. Its role is to ensure the business rules are respected and produce **Events**. It should have a default implementation, which is the initial value. It is okay to have placeholder values for the default implementation. You can also use `Option<T>` to represent a value that is not yet available.
+A **State** is a representation of a domain-specific object at a certain time. Its role is to ensure the business rules are respected and produce **Events**. It should have a default implementation, which is the initial value. It is okay to have placeholder values for the default implementation. You can also use `Option<T>` or a custom `enum` to represent a value that is not yet available.
 
 - **Structure**: Primarily a straightforward object, characterized by its properties and data fields.
 - **Evolution**: Capable of evolving over time with [events](events.mdx).
@@ -19,18 +34,13 @@ A **State** is a representation of a domain-specific object at a certain time. I
 
 ## Creating States
 
-We want to represent a bank account for a very simple banking application. A bank account has a balance, a description, and an owner. We will use the exact same words to have a loyal representation of the domain.
+A todo-list is a list of tasks that can be in progress or completed. We will use the exact same words to have a loyal representation of the domain.
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="domain/account_state.rs"
-#[derive(Default, Debug)]
-pub struct BankAccount {
-    pub balance: f64,
-    pub description: String,
-    pub owner: Option<String>
-}
+```rust filename="domain/src/todolist_scalar.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/domain/src/todolist_state.rs#L10-L20
 ```
+
 </Tabs.Tab>
 </Tabs>
 
@@ -40,24 +50,11 @@ You can build a new state by applying a sequence of events to an initial state. 
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="domain/bankaccount_event.ts"
-use framework::*;
+```rust filename="domain/src/todolist_scalar.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/domain/src/todolist_state.rs#L27-L42
+```
 
-impl Events<BankAccount> for Vec<BankAccountEvent> {
-fn apply(&self, &mut state: BankAccount) {
-for event in self {
-match event {
-BankAccountEvent::Deposited(amount) => state.balance += amount,
-BankAccountEvent::Withdrawn(amount) => state.balance -= amount,
-}
-}
-}
-}
-
-````
 </Tabs.Tab>
 </Tabs>
-
 
 ## Producing Events
 
@@ -65,28 +62,20 @@ Messages are processed with the state, which will either produce events or an er
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="domain/bankaccount_message.rs"
-use framework::*;
+```rust filename="domain/src/todolist_scalar.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/domain/src/todolist_state.rs#L44-L71
+```
 
-impl Message<BankAccount> for BankAccountMessage {
-  type Error = BankAccountError;
-  type Events = BankAccountEvent;
+</Tabs.Tab>
+</Tabs>
 
-  fn send(&self, state: &BankAccount) -> Result<Self::Events, Self::Error> {
-    match self {
-      BankAccountMessage::Deposit(amount) => {
-        Ok(BankAccountEvent::AmountDeposited(*amount))
-      }
-      BankAccountMessage::Withdraw(amount) => {
-        if *amount > state.balance {
-          return Err(BankAccountError::NotEnoughFund);
-        }
-        Ok(BankAccountEvent::AmountWithdrawn(*amount))
-      }
-    }
-  }
-}
-````
+## Implementing the `State` trait
+
+You can implement the `State` trait from the `forgen` crate.
+
+<Tabs items={['Rust']}>
+<Tabs.Tab>
+```rust url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/crates/framework/src/lib.rs#L13-L20
+```
 
 </Tabs.Tab>
 </Tabs>

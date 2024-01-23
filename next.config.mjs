@@ -12,12 +12,12 @@ const withNextra = nextra({
       () =>
         codeImport({
           removeRedundantIndentations: true,
-          rootDir: path.join(process.cwd(), "todo"),
+          rootDir: path.join(process.cwd(), "examples"),
         }),
       () =>
         remoteCode({
           removeRedundantIndentations: true,
-          rootDir: "https://github.com/forgen-org/todo/raw/main",
+          rootDir: "https://github.com/forgen-org/todo/raw/main/",
         }),
     ],
   },

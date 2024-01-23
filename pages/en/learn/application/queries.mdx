@@ -5,12 +5,12 @@ import { Tabs } from "nextra/components"
 ```mermaid
 flowchart LR
   Query
-  Data
+  Projection
   Error
   execute{execute}
 
   Query --> execute
-  execute --Ok--> Data
+  execute --Ok--> Projection
   execute --Err--> Error
 ```
 
@@ -24,12 +24,9 @@ Queries are about requesting and retrieving data without affecting the system's 
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="application/queries.rs"
-#[derive(Debug, Deserialize)]
-pub struct GetAccountBalanceQuery {
-    account_id: String,
-}
+```rust filename="application/src/query.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/application/src/query.rs#L5-L6
 ```
+
 </Tabs.Tab>
 </Tabs>
 
@@ -39,20 +36,8 @@ Queries are usually implemented to interact with the read model, fetching data a
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="application/queries.rs"
-use framework::*;
-
-#[async_trait]
-impl<R> Query<R> for GetAccountBalanceQuery
-where
-R: AccountReadModel
-{
-async fn execute(&self, runtime: &R) -> AnyResult<AccountBalance> {
-runtime.get_account_balance(&self.account_id).await
-}
-}
-
+```rust filename="application/src/query.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/application/src/query.rs#L8-L18
 ```
+
 </Tabs.Tab>
 </Tabs>
-```

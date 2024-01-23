@@ -22,16 +22,8 @@ Ports are implemented as interfaces or abstract classes, depending on the progra
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="application/ports.rs"
-use framework::*;
-pub use domain::{BankAccount, BankAccountEvent};
-
-pub trait BankAccountStore {
-async fn get_account(&self, name: &str) -> AnyResult<BankAccount>;
-async fn push_account(&self, name: &str, events: &[BankAccountEvent]) -> AnyResult<()>;
-}
-
+```rust filename="application/src/port.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/application/src/port.rs
 ```
+
 </Tabs.Tab>
 </Tabs>
-```

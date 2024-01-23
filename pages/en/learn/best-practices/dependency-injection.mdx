@@ -1,0 +1,23 @@
+import { Tabs } from "nextra/components"
+
+# Prefer Dependency Injection over Explicit Import
+
+```mermaid
+graph LR
+  Service -- implements --> Port
+  UseCase -- uses --> Port
+  Service -- injected --> UseCase
+```
+
+Using explicit imports can lead to tightly coupled and less maintainable code, as the importing module becomes directly dependent on the imported module. This strong dependency can obfuscate the interactions between components, making them less modular and harder to test, understand, and refactor.
+
+Dependency Injection allows for the inversion of control, wherein the dependencies of a component are 'injected' by an external entity, rather than being created by the component itself. This approach promotes decoupling between components, enhancing code maintainability, testability, and readability.
+
+## How to Implement
+
+<Tabs items={['Rust']}>
+<Tabs.Tab>
+```rust file=<rootDir>/rust/src/dependency_injection.rs
+```
+</Tabs.Tab>
+</Tabs>

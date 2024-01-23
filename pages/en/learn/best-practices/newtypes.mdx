@@ -1,0 +1,23 @@
+import { Callout, Tabs } from "nextra/components"
+
+# Newtypes
+
+In programming, a common dilemma is managing primitive data types and ensuring that they conform to certain constraints. The Newtype pattern emerges as a solution, allowing developers to wrap primitive types in a way that conveys more meaning and enforces tighter constraints. For instance, instead of managing generic number types, we can create types like `PositiveInteger` and `NonZeroNumber`, making our programs more robust and semantically rich.
+
+The Newtype pattern involves creating a new type that wraps around an existing type. It doesn’t alter the representation of the enclosed type but adds a new layer of meaning and constraints to it. This helps in avoiding logical errors related to the misuse of types, such as passing a negative number where a positive number is expected.
+
+<Callout type="info" emoji="ℹ️">
+  It's a good practice to use the Newtype as soon as possible. For example, if
+  you have a `UserId` to represent a user's UUID, you should use it as soon as
+  you get the UUID from the database. This way, you can avoid passing the UUID
+  around and accidentally using it as a `PostId` or `CommentId`.
+</Callout>
+
+## How to Implement
+
+<Tabs items={['Rust']}>
+<Tabs.Tab>
+```rust file=<rootDir>/rust/src/newtypes.rs
+```
+</Tabs.Tab>
+</Tabs>

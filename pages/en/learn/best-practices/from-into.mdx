@@ -1,0 +1,21 @@
+import { Callout, Tabs } from "nextra/components"
+
+# From/Into
+
+While building software, especially with layered architectures, implementing conversions in the higher layers, like REST inputs into Commands, or Postgres query Results into Entities, is fundamental. If multiple objects need conversion into one, an aggregate object implementing the To pattern should be created first.
+
+Leveraging the From/To pattern is akin to preferring Dependency Injection over explicit import, promoting decoupling and enhancing code maintainability, testability, and readability. It allows the software to be more adaptable to change, and its components more interchangeable, giving developers the ability to switch implementations with minimal hassle.
+
+<Callout type="info" emoji="ℹ️">
+  It's always the outer layer's responsibility to convert the data into the
+  format it needs. The inner layers should not be aware of the outer layers.
+</Callout>
+
+## How to Implement
+
+<Tabs items={['Rust']}>
+<Tabs.Tab>
+```rust file=<rootDir>/rust/src/from_into.rs
+```
+</Tabs.Tab>
+</Tabs>

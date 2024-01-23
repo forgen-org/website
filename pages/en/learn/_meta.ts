@@ -1,7 +1,6 @@
 export default {
   introduction: "Introduction",
-  supported_languages: "Supported Languages",
-  best_practices: "Best Practices",
+  "best-practices": "Best Practices",
   "-Architecture": {
     title: "Architecture",
     type: "separator",

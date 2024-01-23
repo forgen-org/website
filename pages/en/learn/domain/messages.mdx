@@ -3,20 +3,14 @@ import { Tabs } from "nextra/components"
 # Messages
 
 ```mermaid
-flowchart LR
-  Message
-  State
-  Error
-  Event[[Event]]
-  Send{send}
+graph LR
+    Message <-- tied to --> Business[Business Intention]
+    Message -- uses --> Scalar[[Scalar]]
 
-  Message --> Send
-  State --> Send
-  Send --Ok--> Event
-  Send --Err--> Error
+    style Business stroke-dasharray: 5 5
 ```
 
-In event-sourced systems, messages play a pivotal role in driving application behavior. They act as the catalyst for state changes, adhering strictly to business rules. Messages are essentially actions or commands sent to the system's state. Their primary function is to validate and process these actions according to the defined business logic.
+In event-sourced systems, **messages** play a pivotal role in driving behavior. They act as the catalyst for state changes, adhering strictly to business rules. Messages are essentially actions or commands sent to the system's state. Their primary function is to validate and process these actions according to the defined business logic.
 
 - **Actions to State**: Messages represent actions directed at the system's state.
 - **Business Rule Enforcement**: They are responsible for ensuring that all interactions adhere to the established business rules.
@@ -30,30 +24,8 @@ The message is the input to the system, and the event is the output. Messages ar
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="domain/bankaccount_message.rs"
-pub enum BankAccountMessage {
-  Deposit(f64),
-  Withdraw(f64),
-}
+```rust filename="domain/src/todolist_message.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/domain/src/todolist_message.rs
 ```
+
 </Tabs.Tab>
 </Tabs>
-
-## Creating Errors
-
-Errors are used to communicate to the user that a business rule or state invariant has been violated. They should be self-explanatory and provide enough information to the user to understand what went wrong.
-
-<Tabs items={['Rust']}>
-<Tabs.Tab>
-```rust filename="domain/bankaccount_error.rs"
-use framework::*;
-
-#[derive(Debug, Error)]
-pub enum BankAccountError { #[error("Not enough fund")]
-NotEnoughFund
-}
-
-```
-</Tabs.Tab>
-</Tabs>
-```

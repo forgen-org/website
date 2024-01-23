@@ -20,76 +20,10 @@ Creating a runtime involves defining a struct that includes all the necessary tr
 
 <Tabs items={['Rust']}>
 <Tabs.Tab>
-```rust filename="client/runtime.rs"
-use framework::*;
+```rust filename="clients/axum/src/runtime.rs" url=https://raw.githubusercontent.com/forgen-org/todo/ce9213676b2ebbd6532aed184f50fee13fd2684c/clients/axum/src/runtime.rs
+```
 
-#[derive(Default, Delegate)]
-pub struct Runtime { #[to(TodoListStore, TodoListRepository)]
-store: services::memstore::MemStore,
-}
-
-````
 </Tabs.Tab>
 </Tabs>
 
 This `Runtime` struct becomes the backbone of your application's client layer, orchestrating the interactions between different components.
-
-## Utilizing Runtime
-
-Once defined, the runtime is instantiated in the main function of the client and passed to the execute function of commands and queries.
-
-### Execute Trait
-
-The `Execute` trait is a fundamental part of this process, defining how an operation is executed within the context of a given runtime.
-
-<Tabs items={['Rust']}>
-<Tabs.Tab>
-```rust filename="traits/execute.rs"
-#[async_trait]
-pub trait Execute<R> {
-    type Output = ();
-    type Error: Display = AnyError;
-
-    async fn execute(&self, runtime: &R) -> Result<Self::Output, Self::Error>;
-}
-````
-
-</Tabs.Tab>
-</Tabs>
-
-### Command Execution Example
-
-Here's an example of a command that utilizes a runtime to execute its operations:
-
-<Tabs items={['Rust']}>
-<Tabs.Tab>
-```rust filename="commands/todo_list_command.rs"
-#[async_trait]
-impl<R> Execute<R> for Command
-where
-    R: TodoListRepository + TodoListStore + Send + Sync,
-{
-    async fn execute(&self, runtime: &R) -> AnyResult<()> {
-        let message = self.try_into()?;
-
-        // Pull the current state and apply the message
-        let todolist = TodoListStore::pull(runtime).await?;
-        let new_events = todolist.send(&message)?;
-        TodoListStore::push(runtime, &new_events).await?;
-
-        // Save the projection
-        let mut projection = TodoListRepository::fetch(runtime).await?;
-        projection.apply(&new_events);
-        TodoListRepository::save(runtime, &projection).await?;
-
-        Ok(())
-    }
-
-}
-
-```
-</Tabs.Tab>
-</Tabs>
-
-In this example, the command interacts with the runtime to pull the current state, apply changes, and then save the updated state back through the store and repository.
-```
