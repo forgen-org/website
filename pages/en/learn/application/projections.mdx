@@ -4,12 +4,17 @@ import { Tabs } from "nextra/components"
 
 ```mermaid
 graph LR;
-  State --> project
-  project --> Projection
+  Projection
+  NewProjection[Projection]
+  Event[[Event]]
+  Apply{apply}
 
-  project{project}
+  Event --> Apply
+  Projection --> Apply
+  Apply --> NewProjection
 
-  style State stroke-dasharray: 5 5
+
+  style Event stroke-dasharray: 5 5
 ```
 
 Projections are used to create read models or views from the series of events or state changes that occur in the system. The role of a projection is to transform a state into a more readable or convenient format, often optimized for queries.
