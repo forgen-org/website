@@ -105,7 +105,7 @@ export const Cover = () => {
       <div className="relative w-3/4">
         <Image
           alt={current.title}
-          className="rounded-lg object-scale-down shadow-xl dark:bg-gray-700 dark:bg-gray-800"
+          className="max-h-96 rounded-lg object-cover shadow-xl dark:bg-gray-700 dark:bg-gray-800"
           height={0}
           priority
           sizes="100vw"
