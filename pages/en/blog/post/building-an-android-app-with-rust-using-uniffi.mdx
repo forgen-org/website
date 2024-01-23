@@ -79,10 +79,12 @@ rustup target add \
 
 ## Step 3: Building Libraries for Android
 
-Compile the dynamic libraries:
+Create your Android project in Android Studio.
+
+Compile the dynamic libraries in `./app/src/main/jniLibs` (next to `java` and `res` directories):
 
 ```bash
-cargo ndk -o android/app/src/main/jniLibs \
+cargo ndk -o ./app/src/main/jniLibs \
         --manifest-path ./Cargo.toml \
         -t armeabi-v7a \
         -t arm64-v8a \
@@ -96,7 +98,7 @@ cargo ndk -o android/app/src/main/jniLibs \
 Generate the bindings for Kotlin:
 
 ```bash
-cargo run --bin uniffi-bindgen generate --library ../../target/debug/libmobile.dylib --language kotlin --out-dir android/app/src/main/java/tech/forgen/todolist/rust
+cargo run --bin uniffi-bindgen generate --library ./target/debug/libmobile.dylib --language kotlin --out-dir android/app/src/main/java/tech/forgen/todolist/rust
 ```
 
 ## Step 5: Setting up Your Android Project
@@ -149,7 +151,7 @@ cargo ndk -o android/app/src/main/jniLibs \
         build --release
 
 # Create Kotlin bindings
-cargo run --bin uniffi-bindgen generate --library ../../target/debug/libmobile.dylib --language kotlin --out-dir android/app/src/main/java/tech/forgen/todolist/rust
+cargo run --bin uniffi-bindgen generate --library ./target/debug/libmobile.dylib --language kotlin --out-dir android/app/src/main/java/tech/forgen/todolist/rust
 ```
 
 This approach simplifies the process of integrating Rust into your Android development, leveraging the advantages of Rust's safety and performance in your Android apps.
