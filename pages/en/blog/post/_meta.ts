@@ -13,7 +13,15 @@ const Author: Record<string, Author> = {
   },
 }
 
-export const articles: Record<string, Article> = {
+export const articles = {
+  podcast: {
+    abstract:
+      "A podcast in French about software engineering and the future of the Web.",
+    author: Author.Alexandre,
+    cover: "/blog/podcast/cover.png",
+    date: new Date("2024-01-22"),
+    title: "🇫🇷 Forgen Podcast",
+  },
   "remark-remote-code": {
     abstract:
       "Enhance your Markdown files by dynamically importing code blocks from remote sources.",
@@ -38,7 +46,7 @@ export const articles: Record<string, Article> = {
     date: new Date("2024-01-22"),
     title: "Building an iOS App with Rust Using UniFFI",
   },
-}
+} satisfies Record<string, Article>
 
 export default {
   "*": {
