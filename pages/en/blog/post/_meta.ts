@@ -19,7 +19,7 @@ export const articles = {
       "A podcast in French about software engineering and the future of the Web.",
     author: Author.Alexandre,
     cover: "/blog/podcast/cover.png",
-    date: new Date("2024-01-22"),
+    date: new Date("2024-01-24"),
     title: "🇫🇷 Forgen Podcast",
   },
   "remark-remote-code": {
@@ -27,7 +27,7 @@ export const articles = {
       "Enhance your Markdown files by dynamically importing code blocks from remote sources.",
     author: Author.Alexandre,
     cover: "/blog/remark-remote-code/cover.png",
-    date: new Date("2024-01-22"),
+    date: new Date("2024-01-23"),
     title: "@forgen/remark-remote-code",
   },
   "building-an-android-app-with-rust-using-uniffi": {
