@@ -6,7 +6,7 @@ import Link from "next/link"
 
 const config: DocsThemeConfig = {
   feedback: {
-    useLink: () => "https://discord.gg/6fTK3ssg",
+    useLink: () => "https://discord.gg/73jbP8pVsr",
   },
   editLink: { component: () => null },
 
@@ -97,7 +97,7 @@ const config: DocsThemeConfig = {
 
   // External links
   chat: {
-    link: "https://discord.gg/6fTK3ssg",
+    link: "https://discord.gg/73jbP8pVsr",
   },
   project: {
     link: "https://github.com/forgen-org",
