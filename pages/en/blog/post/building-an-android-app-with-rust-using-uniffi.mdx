@@ -109,6 +109,18 @@ In the project, import the Kotlin binding files and the compiled libraries from 
 
 ## Step 6: Integrating Rust Functions in Android
 
+Add these imports to your `build.gradle` file:
+
+```gradle filename="build.gradle"
+dependencies {
+    // ...
+
+    // Uniffi
+    implementation("net.java.dev.jna:jna:5.7.0@aar")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+}
+```
+
 Edit your main activity or any Kotlin file to use the Rust functions. For example:
 
 ```kotlin filename="MainActivity.kt"
