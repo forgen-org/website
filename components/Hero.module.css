@@ -14,9 +14,9 @@
 }
 
 :global(.dark) .primary h1,
-.primary h2,
-.primary h3,
-.primary h4 {
+:global(.dark) .primary h2,
+:global(.dark) .primary h3,
+:global(.dark) .primary h4 {
   @apply text-white;
 }
 
