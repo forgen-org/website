@@ -136,42 +136,47 @@ impl Data {
 
 Despite the many benefits, there are a few things I miss from TypeScript:
 
-### 1. **Easy Lambda Functions**: Rust's `Fn` trait isn't as straightforward as TypeScript's arrow functions. Rust requires more boilerplate for closures, especially when dealing with lifetimes or async functions.
+### 1. **Easy Lambda Functions**
 
-   ```rust
-   let add_one = |x: i32| x + 1;
+Rust's `Fn` trait isn't as straightforward as TypeScript's arrow functions. Rust requires more boilerplate for closures, especially when dealing with lifetimes or async functions.
 
-    // Rust's equivalent of an async function with a requirement R, a return type T, and an error type E
-   type Lambda<R, T, E> = Box<dyn Fn(R) -> Pin<Box<dyn Future<Output = Result<T, E>> + Send + Sync>>>; 
-   ```
+```rust
+let add_one = |x: i32| x + 1;
 
-### 2. **Type Inference**: TypeScript's type inference is more flexible. In Rust, explicit type declarations are more common, which can be verbose.
+// Rust's equivalent of an async function with a requirement R, a return type T, and an error type E
+type Lambda<R, T, E> = Box<dyn Fn(R) -> Pin<Box<dyn Future<Output = Result<T, E>> + Send + Sync>>>; 
+```
 
-   ```rust
-   let number = 5; // Rust infers the type as i32
+### 2. **Type Inference**
 
-   fn add(a: i32, b: i32) -> i32 { // Explicit type declaration
-       a + b
-   }
-   ```
+TypeScript's type inference is more flexible. In Rust, explicit type declarations are more common, which can be verbose.
 
-   ```typescript
-    const number = 5; // TypeScript infers the type as number
+```rust
+let number = 5; // Rust infers the type as i32
 
-    function add(a: number, b: number) { // No explicit type declaration, add return type is of type number
-        return a + b;
-    }
-    ```
-   const 
+fn add(a: i32, b: i32) -> i32 { // Explicit type declaration
+    a + b
+}
+```
 
-### 3. **Union Types**: Rust requires using enums to achieve what TypeScript does with union types. This can sometimes lead to more verbose code.
+```typescript
+const number = 5; // TypeScript infers the type as number
 
-   ```rust
-   enum MyUnion {
-       Num(i32),
-       Text(String),
-   }
-   ```
+function add(a: number, b: number) { // No explicit type declaration, add return type is of type number
+    return a + b;
+}
+```
+
+### 3. **Union Types**
+
+Rust requires using enums to achieve what TypeScript does with union types. This can sometimes lead to more verbose code.
+
+```rust
+enum MyUnion {
+    Num(i32),
+    Text(String),
+}
+```
 
 In conclusion, transitioning to Rust has been a rewarding experience. While there are aspects of TypeScript I miss, Rust's robustness, performance, and type safety make it an excellent choice for many projects. The journey from TypeScript to Rust has been one of growth and learning, and I look forward to continuing
 
