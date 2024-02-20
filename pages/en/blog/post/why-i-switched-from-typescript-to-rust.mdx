@@ -115,19 +115,35 @@ impl Data {
 
 Despite the many benefits, there are a few things I miss from TypeScript:
 
-1. **Easy Lambda Functions**: Rust's `Fn` trait isn't as straightforward as TypeScript's arrow functions. Rust requires more boilerplate for closures, especially when dealing with lifetimes.
+### 1. **Easy Lambda Functions**: Rust's `Fn` trait isn't as straightforward as TypeScript's arrow functions. Rust requires more boilerplate for closures, especially when dealing with lifetimes or async functions.
 
    ```rust
    let add_one = |x: i32| x + 1;
+
+    // Rust's equivalent of an async function with a requirement R, a return type T, and an error type E
+   type Lambda<R, T, E> = Box<dyn Fn(R) -> Pin<Box<dyn Future<Output = Result<T, E>> + Send + Sync>>>; 
    ```
 
-2. **Type Inference**: TypeScript's type inference is more flexible. In Rust, explicit type declarations are more common, which can be verbose.
+### 2. **Type Inference**: TypeScript's type inference is more flexible. In Rust, explicit type declarations are more common, which can be verbose.
 
    ```rust
    let number = 5; // Rust infers the type as i32
+
+   fn add(a: i32, b: i32) -> i32 { // Explicit type declaration
+       a + b
+   }
    ```
 
-3. **Union Types**: Rust requires using enums to achieve what TypeScript does with union types. This can sometimes lead to more verbose code.
+   ```typescript
+    const number = 5; // TypeScript infers the type as number
+
+    function add(a: number, b: number) { // No explicit type declaration, add return type is of type number
+        return a + b;
+    }
+    ```
+   const 
+
+### 3. **Union Types**: Rust requires using enums to achieve what TypeScript does with union types. This can sometimes lead to more verbose code.
 
    ```rust
    enum MyUnion {
