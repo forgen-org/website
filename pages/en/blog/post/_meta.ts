@@ -14,6 +14,22 @@ const Author: Record<string, Author> = {
 }
 
 export const articles = {
+  "how-not-to-panic-using-backtrace-in-rust": {
+    abstract:
+      "A podcast in French about software engineering and the future of the Web.",
+    author: Author.Alexandre,
+    cover: "/blog/how-not-to-panic-using-backtrace-in-rust/cover.webp",
+    date: new Date("2024-02-20"),
+    title: "How not to panic using `Backtrace` in Rust",
+  },
+  "why-i-switched-from-typescript-to-rust": {
+    abstract:
+      "After nearly a year of diving into Rust, transitioning from a TypeScript background, I can wholeheartedly say I have no regrets.",
+    author: Author.Alexandre,
+    cover: "/blog/why-i-switched-from-typescript-to-rust/cover.webp",
+    date: new Date("2024-02-13"),
+    title: "Why I switched from Typescript to Rust",
+  },
   podcast: {
     abstract:
       "A podcast in French about software engineering and the future of the Web.",

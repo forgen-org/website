@@ -1,0 +1,90 @@
+# General rules of thumb
+
+**Date: 2024-02-09**
+
+I have been regularly going back and forth between styles and patterns in Rust so I decided to write down some rules of thumb that I should remember.
+
+## Representing Commands and Queries
+
+Because **Commands** share some behaviours and have the same return type, it is tempting to do like this:
+
+```rs
+enum Command {
+    Create,
+    Update,
+    Delete,
+}
+
+impl Command {
+  // ...
+}
+```
+
+However, for **Queries** it is not possible because they don't share the same return type. So, we have to do like this:
+
+```rs
+struct GetUser {
+    id: Uuid,
+}
+
+struct GetUsers {
+    page: i32,
+    limit: i32,
+}
+```
+
+For better consistency, we should do the same for **Commands** and put the shared logic into a **Listener**:
+
+```rs
+
+impl<R> Execute<R> for Create {
+    fn execute(&self, runtime: R) {
+      // ...
+      self.listen(events).await;
+    }
+}
+
+impl<R> Listen for R
+where
+    R: AuthStore + UserRepository,
+{
+    type Event = Event;
+    type Error = ServiceError;
+
+    async fn listen(&self, events: &[Self::Event]) -> Result<(), Self::Error> {
+        // ...
+    }
+}
+```
+
+## Some naming conventions
+
+1. Keep the name simple and work with modules. For example, instead of `UserRepository`, use `user::Repository`.
+2. Use verbs for **Commands** and **Queries**.
+3. Traits should not overlap common names such as **Event** or **Projection**, use a verb to describe the action. For example, `Listen` or `Execute`.
+
+## Generics in traits
+
+In Rust there are two ways of putting generics in traits :
+
+```rs
+trait MyTrait<T> {
+    fn my_method(&self, t: T);
+}
+
+trait MyTrait {
+    type T;
+    fn my_method(&self, t: Self::T);
+}
+```
+
+They both have some use cases but try to use the second one as it is more flexible and explicit.
+
+```rs
+trait Execute<R> {
+  type Error;
+  fn execute(&self, runtime: R) -> Result<(), Error>;
+}
+```
+
+Here, it is useful to use R as a generic here because we can define the `Execute` trait multiple times on a same struct for different runtimes. However it is unlikely that we need to define it for different `Error` types. In other words, for a given `Runtime`, the `Error` should be always the same.
