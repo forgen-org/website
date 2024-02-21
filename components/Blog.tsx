@@ -1,3 +1,4 @@
+import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
 import { useConfig } from "nextra-theme-docs"
@@ -123,36 +124,43 @@ export const Details = () => {
   const current = config.normalizePagesResult.activePath.at(-1) as ItemArticle
 
   return (
-    <header className="not-format mb-4 lg:mb-6">
-      <address className="mb-6 flex items-center not-italic">
-        <div className="mr-3 inline-flex items-center text-sm text-gray-900 dark:text-white">
-          <Image
-            alt={current.author.name}
-            className="mr-4 h-10 w-10 rounded-full"
-            height={40}
-            src={current.author.avatar}
-            width={40}
-          />
-          <div>
-            <Link
-              href={current.author.github}
-              rel="author"
-              className="text-xl font-bold text-gray-900 dark:text-white"
-            >
-              {current.author.name}
-            </Link>
-            <p className="text-base text-gray-500 dark:text-gray-400">
-              <time
-                dateTime={current.date.toString()}
-                title={formatDate(current.date)}
+    <>
+      <Head>
+        <meta property="og:title" content={current.title} />
+        <meta property="og:description" content={current.abstract} />
+        <meta property="og:image" content={current.cover} />
+      </Head>
+      <header className="not-format mb-4 lg:mb-6">
+        <address className="mb-6 flex items-center not-italic">
+          <div className="mr-3 inline-flex items-center text-sm text-gray-900 dark:text-white">
+            <Image
+              alt={current.author.name}
+              className="mr-4 h-10 w-10 rounded-full"
+              height={40}
+              src={current.author.avatar}
+              width={40}
+            />
+            <div>
+              <Link
+                href={current.author.github}
+                rel="author"
+                className="text-xl font-bold text-gray-900 dark:text-white"
               >
-                {formatDate(current.date)}
-              </time>
-            </p>
+                {current.author.name}
+              </Link>
+              <p className="text-base text-gray-500 dark:text-gray-400">
+                <time
+                  dateTime={current.date.toString()}
+                  title={formatDate(current.date)}
+                >
+                  {formatDate(current.date)}
+                </time>
+              </p>
+            </div>
           </div>
-        </div>
-      </address>
-    </header>
+        </address>
+      </header>
+    </>
   )
 }
 

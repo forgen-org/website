@@ -144,7 +144,7 @@ Rust's `Fn` trait isn't as straightforward as TypeScript's arrow functions. Rust
 let add_one = |x: i32| x + 1;
 
 // Rust's equivalent of an async function with a requirement R, a return type T, and an error type E
-type Lambda<R, T, E> = Box<dyn Fn(R) -> Pin<Box<dyn Future<Output = Result<T, E>> + Send + Sync>>>; 
+type Lambda<R, T, E> = Box<dyn Fn(R) -> Pin<Box<dyn Future<Output = Result<T, E>> + Send + Sync>>>;
 ```
 
 ### 2. **Type Inference**
@@ -160,10 +160,11 @@ fn add(a: i32, b: i32) -> i32 { // Explicit type declaration
 ```
 
 ```typescript
-const number = 5; // TypeScript infers the type as number
+const number = 5 // TypeScript infers the type as number
 
-function add(a: number, b: number) { // No explicit type declaration, add return type is of type number
-    return a + b;
+function add(a: number, b: number) {
+  // No explicit type declaration, add return type is of type number
+  return a + b
 }
 ```
 

@@ -1,0 +1,34 @@
+# Non Blocking Commands and Event Enveloppes
+
+**Date: 2024-02-20**
+
+## Non Blocking Commands
+
+At the moment, we said: "the role of a command is too encapsulate side effects". Which meants that if a projection needs to be computed or a notification to be sent or whatever side-effect you could image: this would _need_ to be done in a command.
+
+However, this creates a problem. Let's say we have some heavy computation to do at the end of a command, for example some `ComputeDecimalOfPi`. This would block the caller and is against the event loop philosophy. What we want is to answer the user as fast as possible and then do the heavy computation in the background, sending them an event when the computation is over.
+
+The role of a command should be refined as follow: "the role of a command is to validate domain rules and save domain events". We need to add a new concept: the `Listener`. A listener is a function that will be called when a command is executed. It will be called with the command and the domain events that were saved. It will be called in a non-blocking way.
+
+## Event Enveloppes
+
+We fixed the problem of the heavy computation but what if we _want_ to block the caller? For example, if we want to wait for the recomputation of the projection before answering the user. Well, easy then: we should wait for an event. But this won't be a domain event, this will be an event from the application layer. And this event should hold some sort of `transaction_id` to be sure that we are waiting for the right event.
+
+```rust
+enum ApplicationEvent {
+    DomainEvent(DomainEvent),
+    ProjectionRecomputed { transaction_id: Uuid },
+}
+```
+
+In order to respect the rule of: `Command -> Result<(), Error>`, if we want to have access to the `transaction_id` then we need to pass it as a parameter to the command. This makes sense actually because if a command was to call another one, then we can carry around the same `transaction_id`.
+
+Because basically all of our events will have that sort information, we can create a new concept: the `Enveloppe`. An event enveloppe is a struct that holds a domain event and some metadata. This metadata can be the `transaction_id` or the `user_id` or whatever you want. It is a way to wrap a domain event and add some metadata to it.
+
+```rust
+struct Enveloppe<E> {
+    event: E,
+    transaction_id: Option<Uuid>,
+    user_id: Option<Uuid>,
+}
+```
