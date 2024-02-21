@@ -18,7 +18,7 @@ You don't want to create dozens of errors to handle all of your library/unexpect
 
 The first one is basically like saying: "I don't know what to do, I'm out of here". The second one is like saying: "I don't know what to do, but I'll let you know".
 
-<Callout type="error" emoji="⚠️">
+<Callout type="error" emoji="🚫">
   The first one is bad practice for a simple reason: **when writing code, the
   caller should know about the callee**. If the callee panics, the caller has no
   idea what happened. Your program is lying to you. This is bad and you should
@@ -40,7 +40,7 @@ fn main() -> Result<()> {
 }
 ```
 
-<Callout type="info" emoji="ℹ️">
+<Callout type="info" emoji="ℹ">
   I do not recommend using `anyhow` because you just exchanged one error type
   for another one. It's like saying: "I don't know what to do, but I'll let you
   know with a different message".
@@ -61,7 +61,7 @@ pub struct UnexpectedError {
 }
 ```
 
-<Callout type="warning" emoji="💡">
+<Callout type="warning" emoji="⚠️">
   Problem is: when such an error happen, you want to know where it happened and
   `{message}` won't help you much.
 </Callout>
