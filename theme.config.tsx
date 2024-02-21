@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useConfig, DocsThemeConfig } from "nextra-theme-docs"
-import { Footer } from "./components"
+import { Blog, Comments, Footer } from "./components"
 import { useRouter } from "nextra/hooks"
 import Link from "next/link"
 
@@ -10,8 +10,20 @@ const config: DocsThemeConfig = {
   },
   editLink: { component: () => null },
 
+  // i18n
+  i18n: [
+    {
+      locale: "en",
+      name: "English",
+    },
+    {
+      locale: "fr",
+      name: "Français",
+    },
+  ],
+
   // Main theme
-  head: function useHead() {
+  head: function Head() {
     const config = useConfig()
 
     const title =
@@ -23,11 +35,24 @@ const config: DocsThemeConfig = {
     return (
       <>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:title" content="Forgen" />
+        <meta property="og:title" content={config.frontMatter.title ?? title} />
         <meta
           property="og:description"
-          content="A craftsmanship approach of building web applications"
+          content={
+            config.frontMatter.description ??
+            "A craftsmanship approach of building web applications"
+          }
         />
+        <meta
+          property="og:image"
+          content={config.frontMatter.image ?? "/logo.png"}
+        />
+        {config.frontMatter.publishDate && (
+          <meta
+            property="og:publish_date"
+            content={config.frontMatter.publishDate}
+          />
+        )}
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -49,16 +74,6 @@ const config: DocsThemeConfig = {
       </>
     )
   },
-  i18n: [
-    {
-      locale: "en",
-      name: "English",
-    },
-    {
-      locale: "fr",
-      name: "Français",
-    },
-  ],
   logo: function Logo() {
     const { locale } = useRouter()
 
@@ -71,6 +86,22 @@ const config: DocsThemeConfig = {
     )
   },
   logoLink: false,
+  main: function Main(props: { children: React.ReactNode }) {
+    const config = useConfig()
+
+    if (config.filePath.match(/^pages\/([a-z]+)\/blog\/(?!index\.mdx$)(.+)$/)) {
+      return (
+        <div>
+          <Blog.Cover />
+          <Blog.Details />
+          {props.children}
+          <Comments />
+        </div>
+      )
+    }
+
+    return props.children
+  },
   search: {
     placeholder: function Placeholder() {
       const { locale } = useRouter()

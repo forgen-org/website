@@ -1,11 +1,15 @@
-import { Blog, Comments } from "components"
+---
+abstract: You don't want to create dozens of errors to handle all of your library/unexpected errors.
+author:
+  name: Alexandre Hanot
+  avatar: https://avatars.githubusercontent.com/u/222164?v=4
+  github: https://github.com/Almaju
+cover: /blog/how-not-to-panic-using-backtrace-in-rust/cover.webp
+date: 2024-02-20
+title: How not to panic using `Backtrace` in Rust
+---
+
 import { Callout } from "nextra/components"
-
-<Blog.Cover />
-
-# How not to panic using `Backtrace` in Rust
-
-<Blog.Details />
 
 In your software, there are expected errors such as `YouMustBeEighteenOrOlder` or `PageNotFound`. These are errors that you create and expect to happen sometimes.
 But there are also unexpected errors such as `MongoDbError` or `UnreachableApi`, especially errors from other libraries. These are errors that you don't expect to happen, but they do.
@@ -241,5 +245,3 @@ impl Debug for Trace {
 ```
 
 Please let me know if this helped you!
-
-<Comments />

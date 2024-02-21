@@ -1,11 +1,15 @@
-import { Blog, Comments } from "components"
+---
+abstract: A comprehensive guide on integrating Rust code into an iOS application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.
+author:
+  name: Alexandre Hanot
+  avatar: https://avatars.githubusercontent.com/u/222164?v=4
+  github: https://github.com/Almaju
+cover: /blog/building-an-ios-app-with-rust-using-uniffi/cover.png
+date: 2024-01-22
+title: Building an iOS App with Rust Using UniFFI
+---
+
 import { Callout } from "nextra/components"
-
-<Blog.Cover />
-
-# Building an iOS App with Rust Using UniFFI
-
-<Blog.Details />
 
 Developing iOS applications typically involves languages like Swift or Objective-C. However, with the advent of Rust, a systems programming language known for its safety and performance, and UniFFI, an interface generator for Rust, it's now possible to create iOS apps in Rust. In this blog post, we'll guide you through the process of building a simple iOS app using Rust and UniFFI.
 
@@ -178,5 +182,3 @@ rm -rf bindings
 ## See also
 
 - https://boehs.org/node/uniffi
-
-<Comments />

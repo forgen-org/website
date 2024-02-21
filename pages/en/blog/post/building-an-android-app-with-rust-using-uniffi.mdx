@@ -1,10 +1,13 @@
-import { Blog, Comments } from "components"
-
-<Blog.Cover />
-
-# Building an Android App with Rust Using UniFFI
-
-<Blog.Details />
+---
+abstract: A comprehensive guide on integrating Rust code into an Adroid application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.
+author:
+  name: Alexandre Hanot
+  avatar: https://avatars.githubusercontent.com/u/222164?v=4
+  github: https://github.com/Almaju
+cover: /blog/building-an-android-app-with-rust-using-uniffi/cover.png
+date: 2024-01-22
+title: Building an Android App with Rust Using UniFFI
+---
 
 Developing Android applications is usually associated with languages like Java or Kotlin. However, the rising popularity of Rust, a systems programming language celebrated for its safety and performance, combined with UniFFI, an interface generator for Rust, opens new avenues for Android app development. In this blog post, we delve into the process of building a simple Android app using Rust and UniFFI.
 
@@ -167,5 +170,3 @@ cargo run --bin uniffi-bindgen generate --library ./target/debug/libmobile.dylib
 ```
 
 This approach simplifies the process of integrating Rust into your Android development, leveraging the advantages of Rust's safety and performance in your Android apps.
-
-<Comments />

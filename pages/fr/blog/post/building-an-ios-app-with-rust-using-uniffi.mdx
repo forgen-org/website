@@ -1,1 +1,184 @@
-export { default as default } from "pages/en/blog/post/building-an-ios-app-with-rust-using-uniffi.mdx"
+---
+abstract: A comprehensive guide on integrating Rust code into an iOS application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.
+author:
+  name: Alexandre Hanot
+  avatar: https://avatars.githubusercontent.com/u/222164?v=4
+  github: https://github.com/Almaju
+cover: /blog/building-an-ios-app-with-rust-using-uniffi/cover.png
+date: 2024-01-22
+title: Building an iOS App with Rust Using UniFFI
+---
+
+import { Callout } from "nextra/components"
+
+Developing iOS applications typically involves languages like Swift or Objective-C. However, with the advent of Rust, a systems programming language known for its safety and performance, and UniFFI, an interface generator for Rust, it's now possible to create iOS apps in Rust. In this blog post, we'll guide you through the process of building a simple iOS app using Rust and UniFFI.
+
+## Prerequisites
+
+Before we begin, ensure you have the following installed:
+
+- Rust: Install it from [the official Rust website](https://www.rust-lang.org/).
+- Xcode: Available on the Mac App Store.
+
+## Step 1: Setting Up Your Rust Library
+
+Start by creating a new Rust library.
+
+```bash
+cargo new app --lib
+```
+
+Add [uniffi](https://mozilla.github.io/uniffi-rs/) to your `Cargo.toml` file:
+
+```toml filename="Cargo.toml"
+[lib]
+crate_type = ["cdylib", "staticlib"]
+name = "mobile"
+
+[dependencies]
+uniffi = { version = "0.25.3", features = [ "cli" ] }
+```
+
+Change your `lib.rs` file. Here's a basic example:
+
+```rust filename="src/lib.rs"
+uniffi::setup_scaffolding!();
+
+#[uniffi::export]
+fn say_hi() -> String {
+    "Hello from Rust!".to_string()
+}
+```
+
+We need `uniffi-bindgen` as a CLI tool.
+
+```rust filename="src/bin/uniffi-bindgen.rs"
+fn main() {
+    uniffi::uniffi_bindgen_main()
+}
+```
+
+Build the library:
+
+```bash
+cargo build
+```
+
+In `target/debug`, you should find the `libmobile.dylib` file.
+
+Generate the bindings:
+
+```bash
+cargo run --bin uniffi-bindgen generate --library ./target/debug/libmobile.dylib --language swift --out-dir ./bindings
+```
+
+## Step 2: Building the iOS binaries
+
+Add these targets to Rust:
+
+```bash
+rustup target add aarch64-apple-ios-sim aarch64-apple-ios
+```
+
+Build the library for Swift:
+
+```bash
+cargo build --release --target=aarch64-apple-ios-sim
+cargo build --release --target=aarch64-apple-ios
+```
+
+You should have two binaries `target/aarch64-apple-ios-sim/release/libmobile.a` and `target/aarch64-apple-ios/release/libmobile.a`.
+
+## Step 3: Creating the XCFramework
+
+The XCFramework will allow us to import the library with zero effort in Xcode.
+
+First, we need to rename the file `bindings/mobileFFI.modulemap` to `bindings/module.modulemap`.
+
+<Callout type="warning" emoji="⚠️">
+  It is important to rename the file to `module.modulemap` because Xcode will
+  not be able to find the module otherwise.
+</Callout>
+
+Then, we can create the XCFramework:
+
+```bash
+xcodebuild -create-xcframework \
+        -library ./target/aarch64-apple-ios-sim/release/libmobile.a -headers ./bindings \
+        -library ./target/aarch64-apple-ios/release/libmobile.a -headers ./bindings \
+        -output "ios/Mobile.xcframework"
+```
+
+## Set 4: Import the library in Xcode
+
+Create a new iOS app in Xcode.
+
+Import both the XCFramework `Mobile.xcframework` and the Swift file bindings `bindings/Mobile.swift` files into your project (drag and drop should work).
+
+You should be good to go!
+
+```swift filename="HelloWorld/ContentView.swift"
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text(sayHi()) // <-- Here we call the Rust function
+                .padding()
+        }
+        .padding()
+    }
+}
+```
+
+![iOS App](/blog/building-an-ios-app-with-rust-using-uniffi/hello-from-rust.png)
+
+## Putting everything together
+
+Create a script named `build-ios.sh`. This script automates the process of building your Rust library for various iOS targets.
+
+```bash filename="build-ios.sh"
+#!/bin/bash
+
+# Build the dylib
+cargo build
+
+# Generate bindings
+cargo run --bin uniffi-bindgen generate --library ./target/debug/libmobile.dylib --language swift --out-dir ./bindings
+
+# Add the iOS targets and build
+for TARGET in \
+        aarch64-apple-darwin \
+        aarch64-apple-ios \
+        aarch64-apple-ios-sim \
+        x86_64-apple-darwin \
+        x86_64-apple-ios
+do
+    rustup target add $TARGET
+    cargo build --release --target=$TARGET
+done
+
+# Rename *.modulemap to module.modulemap
+mv ./bindings/mobileFFI.modulemap ./bindings/module.modulemap
+
+# Move the Swift file to the project
+rm ./ios/TodoList/Mobile.swift
+mv ./bindings/mobile.swift ./ios/TodoList/Mobile.swift
+
+# Recreate XCFramework
+rm -rf "ios/Mobile.xcframework"
+xcodebuild -create-xcframework \
+        -library ./target/aarch64-apple-ios-sim/release/libmobile.a -headers ./bindings \
+        -library ./target/aarch64-apple-ios/release/libmobile.a -headers ./bindings \
+        -output "ios/Mobile.xcframework"
+
+# Cleanup
+rm -rf bindings
+```
+
+## See also
+
+- https://boehs.org/node/uniffi

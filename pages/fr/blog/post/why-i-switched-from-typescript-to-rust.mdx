@@ -1,1 +1,185 @@
-export { default as default } from "pages/en/blog/post/why-i-switched-from-typescript-to-rust.mdx"
+---
+abstract: After nearly a year of diving into Rust, transitioning from a TypeScript background, I can wholeheartedly say I have no regrets.
+author:
+  name: Alexandre Hanot
+  avatar: https://avatars.githubusercontent.com/u/222164?v=4
+  github: https://github.com/Almaju
+cover: /blog/why-i-switched-from-typescript-to-rust/cover.webp
+date: 2024-02-13
+title: Why I switched from Typescript to Rust
+---
+
+After nearly a year of diving into Rust, transitioning from a TypeScript background, I can wholeheartedly say I have no regrets. The journey has been enlightening, challenging, and rewarding. Rust, a language empowering everyone to build reliable and efficient software, has features that particularly stand out and address some of the limitations I faced in TypeScript. Here are my reflections on this shift:
+
+## 1. Rust Native Newtypes
+
+Rust's approach to newtypes is something I greatly appreciate. Unlike TypeScript, where we often rely on type aliases, Rust newtypes provide a way to create distinct types. This adds a layer of type safety, preventing accidental mixing of types.
+
+```rust
+struct Kilometers(i32);
+struct Miles(i32);
+
+fn travel(distance: Kilometers) {
+    // Function logic specific to Kilometers
+}
+```
+
+Example usage:
+
+```rust
+let distance = Kilometers(15);
+travel(distance);
+```
+
+## 2. The Power of From/Into Traits
+
+The `From` and `Into` traits in Rust are a game-changer, simplifying conversions between types. This is a step up from TypeScript's more manual and error-prone type conversions.
+
+```rust
+struct Circle {
+    radius: f64,
+}
+
+struct Square {
+    side: f64,
+}
+
+impl From<Square> for Circle {
+    fn from(square: Square) -> Self {
+        Circle { radius: square.side * 0.5 }
+    }
+}
+
+// Usage
+let square = Square { side: 4.0 };
+let circle: Circle = square.into();
+```
+
+## 3. Multiplatform Support
+
+Rust's multiplatform capabilities are impressive. It seamlessly supports various platforms, which was often a challenge in the TypeScript/JavaScript ecosystem, especially when dealing with native modules.
+
+- WASM: https://rustwasm.github.io/wasm-bindgen/
+- UniFFI: https://mozilla.github.io/uniffi-rs/
+
+## 4. Uncompromising Type Safety
+
+Rust takes type safety to another level. There's no equivalent to TypeScript's `"as any"` workaround. Rust's strict type system ensures more robust and reliable code.
+
+```rust
+let number: i32 = 5;
+let text: String = "Hello".to_string();
+
+// This will result in a compile-time error
+let result: i32 = number + text;
+```
+
+## 5. Cargo Features
+
+The Cargo package manager's feature flags allow for adding optional features to a library without bloating the crate size. Users can opt-in to features they need, which is a more flexible approach compared to npm packages.
+
+Example of conditional compilation:
+
+```rust
+#[cfg(feature = "json_support")]
+fn process_json() {
+    // Functionality available only when the 'json_support' feature is enabled
+}
+```
+
+## 6. Cargo Workspace
+
+Unlike the often troublesome npm workspaces, Rust's Cargo workspace is a joy to work with. It eliminates the need for complex setups like turborepo, streamlining the development process.
+
+```toml
+[workspace]
+members = [
+    "crate1",
+    "crate2",
+]
+```
+
+## 7. Performance Gains
+
+Rust's performance is stellar. The efficient compilation to machine code means faster execution, a significant step up from the interpreted nature of TypeScript.
+
+![Rust vs TypeScript Performance](/blog/why-i-switched-from-typescript-to-rust/benchmark.webp)
+
+## 8. Option & Result Types
+
+Rust's `Option` and `Result` types elegantly handle the presence or absence of values and error handling, respectively. This approach is more intuitive and less error-prone than TypeScript's `undefined`, `null`, or exceptions.
+
+```rust
+fn find_value(key: &str) -> Option<&str> {
+    // Returns Some(value) if found, or None otherwise
+}
+
+fn process_data(data: &str) -> Result<(), MyError> {
+    // Returns Ok(()) if successful, or Err(MyError) if an error occurs
+}
+```
+
+## 9. Clear Separation of Data and Implementation
+
+Rust enforces a clear separation between data (structs) and behavior (impls). This leads to more organized and maintainable code, as opposed to TypeScript's more flexible, but sometimes chaotic, structure.
+
+```rust
+struct Data {
+    // fields
+}
+
+impl Data {
+    fn process(&self) {
+        // method implementation
+    }
+}
+```
+
+## What I Miss from TypeScript
+
+Despite the many benefits, there are a few things I miss from TypeScript:
+
+### 1. **Easy Lambda Functions**
+
+Rust's `Fn` trait isn't as straightforward as TypeScript's arrow functions. Rust requires more boilerplate for closures, especially when dealing with lifetimes or async functions.
+
+```rust
+let add_one = |x: i32| x + 1;
+
+// Rust's equivalent of an async function with a requirement R, a return type T, and an error type E
+type Lambda<R, T, E> = Box<dyn Fn(R) -> Pin<Box<dyn Future<Output = Result<T, E>> + Send + Sync>>>;
+```
+
+### 2. **Type Inference**
+
+TypeScript's type inference is more flexible. In Rust, explicit type declarations are more common, which can be verbose.
+
+```rust
+let number = 5; // Rust infers the type as i32
+
+fn add(a: i32, b: i32) -> i32 { // Explicit type declaration
+    a + b
+}
+```
+
+```typescript
+const number = 5 // TypeScript infers the type as number
+
+function add(a: number, b: number) {
+  // No explicit type declaration, add return type is of type number
+  return a + b
+}
+```
+
+### 3. **Union Types**
+
+Rust requires using enums to achieve what TypeScript does with union types. This can sometimes lead to more verbose code.
+
+```rust
+enum MyUnion {
+    Num(i32),
+    Text(String),
+}
+```
+
+In conclusion, transitioning to Rust has been a rewarding experience. While there are aspects of TypeScript I miss, Rust's robustness, performance, and type safety make it an excellent choice for many projects. The journey from TypeScript to Rust has been one of growth and learning, and I look forward to continuing

@@ -1,1 +1,172 @@
-export { default as default } from "pages/en/blog/post/building-an-android-app-with-rust-using-uniffi.mdx"
+---
+abstract: A comprehensive guide on integrating Rust code into an Adroid application using UniFFI, a tool that facilitates the creation of foreign function interfaces in Rust.
+author:
+  name: Alexandre Hanot
+  avatar: https://avatars.githubusercontent.com/u/222164?v=4
+  github: https://github.com/Almaju
+cover: /blog/building-an-android-app-with-rust-using-uniffi/cover.png
+date: 2024-01-22
+title: Building an Android App with Rust Using UniFFI
+---
+
+Developing Android applications is usually associated with languages like Java or Kotlin. However, the rising popularity of Rust, a systems programming language celebrated for its safety and performance, combined with UniFFI, an interface generator for Rust, opens new avenues for Android app development. In this blog post, we delve into the process of building a simple Android app using Rust and UniFFI.
+
+## Prerequisites
+
+Before starting, make sure you have the following tools installed:
+
+- Rust: Obtain it from [the official Rust website](https://www.rust-lang.org/).
+- Android Studio: Download from the [official site](https://developer.android.com/studio).
+
+## Step 1: Setting Up Your Rust Library
+
+Begin by creating a new Rust library:
+
+```bash
+cargo new app --lib
+```
+
+In your `Cargo.toml` file, add the `uniffi` dependency:
+
+```toml filename="Cargo.toml"
+[lib]
+crate_type = ["cdylib"]
+name = "mobile"
+
+[dependencies]
+uniffi = { version = "0.25.3", features = [ "cli" ] }
+```
+
+Modify your `lib.rs` file. Here's an example:
+
+```rust filename="src/lib.rs"
+uniffi::setup_scaffolding!();
+
+#[uniffi::export]
+fn say_hi() -> String {
+    "Hello from Rust on Android!".to_string()
+}
+```
+
+Include the `uniffi-bindgen` CLI tool:
+
+```rust filename="src/bin/uniffi-bindgen.rs"
+fn main() {
+    uniffi::uniffi_bindgen_main()
+}
+```
+
+Build the library:
+
+```bash
+cargo build
+```
+
+## Step 2: Preparing for Android Build
+
+Set up `cargo-ndk` for cross-compiling:
+
+```bash
+cargo install cargo-ndk
+```
+
+Add targets for Android:
+
+```bash
+rustup target add \
+        aarch64-linux-android \
+        armv7-linux-androideabi \
+        i686-linux-android \
+        x86_64-linux-android
+```
+
+## Step 3: Building Libraries for Android
+
+Create your Android project in Android Studio.
+
+Compile the dynamic libraries in `./app/src/main/jniLibs` (next to `java` and `res` directories):
+
+```bash
+cargo ndk -o ./app/src/main/jniLibs \
+        --manifest-path ./Cargo.toml \
+        -t armeabi-v7a \
+        -t arm64-v8a \
+        -t x86 \
+        -t x86_64 \
+        build --release
+```
+
+## Step 4: Generating Kotlin Bindings
+
+Generate the bindings for Kotlin:
+
+```bash
+cargo run --bin uniffi-bindgen generate --library ./target/debug/libmobile.dylib --language kotlin --out-dir ./app/src/main/java/tech/forgen/todolist/rust
+```
+
+## Step 5: Setting up Your Android Project
+
+Create a new Android project in Android Studio.
+
+In the project, import the Kotlin binding files and the compiled libraries from the `jniLibs` directory.
+
+## Step 6: Integrating Rust Functions in Android
+
+Add these imports to your `build.gradle` file:
+
+```gradle filename="build.gradle"
+dependencies {
+    // ...
+
+    // Uniffi
+    implementation("net.java.dev.jna:jna:5.7.0@aar")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+}
+```
+
+Edit your main activity or any Kotlin file to use the Rust functions. For example:
+
+```kotlin filename="MainActivity.kt"
+import tech.forgen.todolist.rust.Mobile
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val message = Mobile.sayHi() // Calling the Rust function
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+}
+```
+
+![Android App](/blog/building-an-android-app-with-rust-using-uniffi/hello-from-rust.png)
+
+## Putting Everything Together
+
+Create a script named `build-android.sh` to automate the Rust library building process for various Android targets.
+
+```bash filename="build-android.sh"
+#!/bin/bash
+
+# Set up cargo-ndk and add the Android targets
+cargo install cargo-ndk
+rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+
+# Build the dylib
+cargo build
+
+# Build the Android libraries in jniLibs
+cargo ndk -o ./app/src/main/jniLibs \
+        --manifest-path ./Cargo.toml \
+        -t armeabi-v7a \
+        -t arm64-v8a \
+        -t x86 \
+        -t x86_64 \
+        build --release
+
+# Create Kotlin bindings
+cargo run --bin uniffi-bindgen generate --library ./target/debug/libmobile.dylib --language kotlin --out-dir ./app/src/main/java/tech/forgen/todolist/rust
+```
+
+This approach simplifies the process of integrating Rust into your Android development, leveraging the advantages of Rust's safety and performance in your Android apps.

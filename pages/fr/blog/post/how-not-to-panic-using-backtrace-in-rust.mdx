@@ -1,1 +1,247 @@
-export { default as default } from "pages/en/blog/post/how-not-to-panic-using-backtrace-in-rust.mdx"
+---
+abstract: You don't want to create dozens of errors to handle all of your library/unexpected errors.
+author:
+  name: Alexandre Hanot
+  avatar: https://avatars.githubusercontent.com/u/222164?v=4
+  github: https://github.com/Almaju
+cover: /blog/how-not-to-panic-using-backtrace-in-rust/cover.webp
+date: 2024-02-20
+title: How not to panic using `Backtrace` in Rust
+---
+
+import { Callout } from "nextra/components"
+
+In your software, there are expected errors such as `YouMustBeEighteenOrOlder` or `PageNotFound`. These are errors that you create and expect to happen sometimes.
+But there are also unexpected errors such as `MongoDbError` or `UnreachableApi`, especially errors from other libraries. These are errors that you don't expect to happen, but they do.
+
+You don't want to create dozens of errors to handle all of your library/unexpected errors. You might consider two options: `panic` via `unwrap` or something like `Box<dyn Error>`.
+
+The first one is basically like saying: "I don't know what to do, I'm out of here". The second one is like saying: "I don't know what to do, but I'll let you know".
+
+<Callout type="error" emoji="⚠️">
+  The first one is bad practice for a simple reason: **when writing code, the
+  caller should know about the callee**. If the callee panics, the caller has no
+  idea what happened. Your program is lying to you. This is bad and you should
+  slap your own hand everytime it happens.
+</Callout>
+
+## Using a generic `Error`
+
+The better way of handling the situation is having a generic error type that can handle all of your unexpected errors. There is a crate that does exactly that: `anyhow`.
+
+```rust
+use anyhow::Result;
+
+// Result is a type alias for Result<T, anyhow::Error>
+fn main() -> Result<()> {
+    let result = std::fs::read_to_string("foo.txt")?;
+    println!("{}", result);
+    Ok(())
+}
+```
+
+<Callout type="info" emoji="ℹ️">
+  I do not recommend using `anyhow` because you just exchanged one error type
+  for another one. It's like saying: "I don't know what to do, but I'll let you
+  know with a different message".
+</Callout>
+
+## Using `thiserror`
+
+We can do better by defining our own error type using `thiserror` which will only allows us to quickly implement `Display` trait via the `Error` trait.
+
+```rust
+use std::fmt::Debug;
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+#[error("An unexpected error occurred: {message}")]
+pub struct UnexpectedError {
+    message: String,
+}
+```
+
+<Callout type="warning" emoji="💡">
+  Problem is: when such an error happen, you want to know where it happened and
+  `{message}` won't help you much.
+</Callout>
+
+## Using `Backtrace`
+
+If we add some `Backtrace` to our error, we can have a better understanding of where the error happened.
+Note: I am using the crate `backtrace = "0.3.69"` and `tracing = "0.1.40"`.
+
+```rust
+use backtrace::Backtrace;
+use tracing::error;
+
+impl UnexpectedError {
+    pub fn from<T: std::fmt::Display>(err: T) -> Self {
+        error!(
+            error = %err,
+            trace = ?BackTrace::new(),
+            "Unexpected Error"
+        );
+        UnexpectedError {
+            message: err.to_string(),
+        }
+    }
+}
+```
+
+## A quiet `Backtrace`
+
+You will notice that `Backtrace` will output a LOT of information. You might want to quiet it down a bit. I made some custom filters to remove the noise. Especially from the `.cargo` and `rustc` directories.
+
+```rust
+
+const FILTERS: [&str; 3] = [".cargo", "rustc"];
+
+struct Trace(Backtrace);
+
+impl Trace {
+    pub fn new() -> Self {
+        Self(backtrace::Backtrace::new())
+    }
+}
+
+impl Debug for Trace {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // Filter out frames that are not relevant to the user
+        let frames = self
+            .0
+            .frames()
+            .iter()
+            .filter(|frame| {
+                let symbols = frame.symbols();
+                for symbol in symbols {
+                    if let Some(name) = symbol.filename() {
+                        let filename = format!("{:?}", name);
+                        if !FILTERS.iter().any(|filter| filename.contains(filter)) {
+                            return true;
+                        }
+                    }
+                }
+                false
+            })
+            .collect::<Vec<&BacktraceFrame>>();
+
+        // Print the backtrace (see capture.rs for the original implementation)
+        let full = fmt.alternate();
+        let style = PrintFmt::Short;
+        let cwd = std::env::current_dir();
+        let mut print_path =
+            move |fmt: &mut fmt::Formatter<'_>, path: backtrace::BytesOrWideString<'_>| {
+                let path = path.into_path_buf();
+                if !full {
+                    if let Ok(cwd) = &cwd {
+                        if let Ok(suffix) = path.strip_prefix(cwd) {
+                            return fmt::Display::fmt(&suffix.display(), fmt);
+                        }
+                    }
+                }
+                fmt::Display::fmt(&path.display(), fmt)
+            };
+
+        let mut f = BacktraceFmt::new(fmt, style, &mut print_path);
+        f.add_context()?;
+        for frame in frames {
+            f.frame().backtrace_frame(frame)?;
+        }
+        f.finish()?;
+        Ok(())
+    }
+}
+```
+
+## Wrapping it up
+
+Here is the full implementation of the `UnexpectedError` with a `Backtrace` ready to use in your code:
+
+```rust
+use backtrace::{Backtrace, BacktraceFmt, BacktraceFrame, PrintFmt};
+use std::fmt;
+use std::fmt::Debug;
+use thiserror::Error;
+use tracing::error;
+
+/// Generic Error
+#[derive(Error, Debug)]
+#[error("An unexpected error occurred: {message}")]
+pub struct UnexpectedError {
+    message: String,
+}
+
+impl UnexpectedError {
+    pub fn from<T: std::fmt::Display>(err: T) -> Self {
+        error!(
+            error = %err,
+            trace = ?Trace::new(),
+            "Unexpected Error"
+        );
+        UnexpectedError {
+            message: err.to_string(),
+        }
+    }
+}
+
+const FILTERS: [&str; 3] = [".cargo", "rustc"];
+
+struct Trace(Backtrace);
+
+impl Trace {
+    pub fn new() -> Self {
+        Self(backtrace::Backtrace::new())
+    }
+}
+
+impl Debug for Trace {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // Filter out frames that are not relevant to the user
+        let frames = self
+            .0
+            .frames()
+            .iter()
+            .filter(|frame| {
+                let symbols = frame.symbols();
+                for symbol in symbols {
+                    if let Some(name) = symbol.filename() {
+                        let filename = format!("{:?}", name);
+                        if !FILTERS.iter().any(|filter| filename.contains(filter)) {
+                            return true;
+                        }
+                    }
+                }
+                false
+            })
+            .collect::<Vec<&BacktraceFrame>>();
+
+        // Print the backtrace (see capture.rs for the original implementation)
+        let full = fmt.alternate();
+        let style = PrintFmt::Short;
+        let cwd = std::env::current_dir();
+        let mut print_path =
+            move |fmt: &mut fmt::Formatter<'_>, path: backtrace::BytesOrWideString<'_>| {
+                let path = path.into_path_buf();
+                if !full {
+                    if let Ok(cwd) = &cwd {
+                        if let Ok(suffix) = path.strip_prefix(cwd) {
+                            return fmt::Display::fmt(&suffix.display(), fmt);
+                        }
+                    }
+                }
+                fmt::Display::fmt(&path.display(), fmt)
+            };
+
+        let mut f = BacktraceFmt::new(fmt, style, &mut print_path);
+        f.add_context()?;
+        for frame in frames {
+            f.frame().backtrace_frame(frame)?;
+        }
+        f.finish()?;
+        Ok(())
+    }
+}
+```
+
+Please let me know if this helped you!
